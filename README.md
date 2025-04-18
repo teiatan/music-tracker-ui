@@ -3,6 +3,7 @@
 A modern single-page application for managing music tracks.
 
 🎵 Features:
+
 - Create, edit, and delete tracks
 - Upload and play audio files
 - Filter by genre and artist

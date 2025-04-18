@@ -1,10 +1,5 @@
 const App = () => {
+  return <>Music Tracker</>;
+};
 
-  return (
-    <>
-      Music Tracker
-    </>
-  )
-}
-
-export default App
+export default App;
