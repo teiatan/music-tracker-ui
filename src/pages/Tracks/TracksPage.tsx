@@ -4,6 +4,7 @@ import { Track } from '../../api/types';
 // import Button from '../../components/Button/Button';
 import { getTracks } from '../../api/getTracks.api';
 import TrackAudioPlayer from '../../features/TrackAudioPlayer/TrackAudioPlayer';
+import TracksList from '../../features/TracksList/TracksList';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -103,20 +104,13 @@ const TracksPage = () => {
           Loading...
         </div>
       ) : (
-        <ul className={styles.trackList}>
-          {tracks.map((track: Track) => (
-            <li key={track.id} data-testid={`track-item-${track.id}`} className={styles.track}>
-              <div data-testid={`track-item-${track.id}-title`}>{track.title}</div>
-              <div data-testid={`track-item-${track.id}-artist`}>{track.artist}</div>
-
-              <button data-testid={`edit-track-${track.id}`}>Edit</button>
-              <button data-testid={`delete-track-${track.id}`}>Delete</button>
-              {!track.audioFile && (
-                <button data-testid={`upload-track-${track.id}`}>Upload Audio</button>
-              )}
-            </li>
-          ))}
-        </ul>
+        <TracksList
+          tracks={tracks}
+          handlePlayClick={(track) => setCurrentTrack(track)}
+          handleEditClick={(track) => console.log('Edit', track)}
+          handleDeleteClick={(track) => console.log('Delete', track)}
+          handleUploadClick={(track) => console.log('Upload', track)}
+        />
       )}
 
       {/* <div data-testid="pagination" className={styles.pagination}>

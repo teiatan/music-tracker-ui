@@ -1,0 +1,65 @@
+.trackList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .trackInfo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .playButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    margin-right: 12px;
+    cursor: pointer;
+  }
+  
+  .playPlaceholder {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+  }
+  
+  .trackDetails {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .trackTitle {
+    font-weight: bold;
+  }
+  
+  .trackArtist {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .trackActions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .actionButton {
+    padding: 6px 12px;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .actionButton:hover {
+    background-color: #1565c0;
+  }
+  
