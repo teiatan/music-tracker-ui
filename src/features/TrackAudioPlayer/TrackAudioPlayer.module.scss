@@ -1,0 +1,51 @@
+.player {
+    display: flex;
+    gap: 1.5rem;
+    background: #f3f4f6;
+    border-radius: 12px;
+    padding: 1rem;
+    align-items: center;
+  }
+  
+  .cover {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .info {
+    flex: 1;
+  }
+  
+  .genres {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  
+  .genre {
+    background: #e0e7ff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+  }
+  
+  .controls {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  
+    button {
+      font-size: 1.25rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  
+    audio {
+      flex: 1;
+    }
+  }
+  
