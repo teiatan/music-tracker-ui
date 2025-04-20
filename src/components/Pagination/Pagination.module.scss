@@ -1,0 +1,40 @@
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+
+  li {
+    margin: 0 5px;
+
+    a {
+      display: block;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      color: #333;
+      text-decoration: none;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+    }
+
+    &.active a {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+
+    &.disabled a {
+      color: #ccc;
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+}

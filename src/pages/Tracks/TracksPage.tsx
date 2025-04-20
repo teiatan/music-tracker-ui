@@ -5,11 +5,15 @@ import { Track } from '../../api/types';
 import { getTracks } from '../../api/getTracks.api';
 import TrackAudioPlayer from '../../features/TrackAudioPlayer/TrackAudioPlayer';
 import TracksList from '../../features/TracksList/TracksList';
+import Pagination from '../../components/Pagination/Pagination';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tracks, setTracks] = useState<Track[] | []>([]);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [itemsPerPage] = useState(10);
 
   const handleNext = () => {
     if (!currentTrack) return;
@@ -35,8 +39,9 @@ const TracksPage = () => {
     const fetchTracks = async () => {
       setIsLoading(true);
       try {
-        const res = await getTracks({ page: 1, limit: 10 });
+        const res = await getTracks({ page: currentPage, limit: itemsPerPage });
         setTracks(res.data);
+        setTotalPages(res.meta.totalPages);
         if (res.data.length > 0) {
           setCurrentTrack(res.data[0]);
         }
@@ -48,7 +53,7 @@ const TracksPage = () => {
     };
 
     fetchTracks();
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
   return (
     <div className={styles.page}>
@@ -113,11 +118,11 @@ const TracksPage = () => {
         />
       )}
 
-      {/* <div data-testid="pagination" className={styles.pagination}>
-        <button data-testid="pagination-prev">Prev</button>
-        <span>1</span>
-        <button data-testid="pagination-next">Next</button>
-      </div> */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </div>
   );
 };
