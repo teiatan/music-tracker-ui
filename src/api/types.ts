@@ -34,3 +34,6 @@ export interface GetTracksResponse {
   data: Track[];
   meta: TracksMeta;
 }
+
+export type Sort = 'title' | 'artist' | 'album' | 'createdAt';
+export type Order = 'asc' | 'desc';

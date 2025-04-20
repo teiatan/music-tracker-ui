@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetTracksResponse } from './types';
+import { GetTracksResponse, Order, Sort } from './types';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -8,8 +8,8 @@ const api = axios.create({
 export interface GetTracksParams {
   page?: number;
   limit?: number;
-  sort?: 'title' | 'artist' | 'album' | 'createdAt';
-  order?: 'asc' | 'desc';
+  sort?: Sort;
+  order?: Order;
   search?: string;
   genre?: string;
   artist?: string;
