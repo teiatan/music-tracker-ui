@@ -94,6 +94,7 @@ const TracksPage = () => {
     setSelectedGenre('');
     setSearchText('');
     setCurrentPage(1);
+    setSelectedTracksIds([]);
   };
 
   const handleCloseModal = () => {
@@ -135,6 +136,10 @@ const TracksPage = () => {
     setCurrentPage(1);
   }, [itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
 
+  useEffect(() => {
+    console.log('selectedTracksIds', selectedTracksIds);
+    console.log('editingTrack', editingTrack);
+  }, [selectedTracksIds, editingTrack]);
   useEffect(() => {
     loadTracks(currentPage);
   }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
@@ -198,13 +203,14 @@ const TracksPage = () => {
           </Select>
           {selectedTracksIds.length > 0 && (
             <Button
-              variant="primary"
-              data-testid="action-button"
+              variant="danger"
+              data-testid="bulk-delete-button"
               onClick={() => {
-                
+                setModalType('delete');
+                setShowModal(true);
               }}
             >
-              Actions
+              delete selected tracks ({selectedTracksIds.length})
             </Button>
           )}
         </div>
@@ -218,6 +224,7 @@ const TracksPage = () => {
             <p>Tracks found {totalTracks}</p>
             <TracksList
               tracks={tracks}
+              selectedTracksIds={selectedTracksIds}
               handlePlayClick={setPlayerTrack}
               handleEditClick={handleEditClick}
               handleDeleteClick={handleDeleteClick}
@@ -250,10 +257,10 @@ const TracksPage = () => {
             />
           )}
 
-          {modalType === 'delete' && editingTrack && (
+          {modalType === 'delete' && (
             <DeleteTrackModalContent
-              trackId={editingTrack.id}
-              trackTitle={editingTrack.title}
+              trackIds={editingTrack?.id ? [editingTrack.id] : selectedTracksIds}
+              trackTitle={editingTrack?.title}
               onClose={handleCloseModal}
               onDeleted={handleSuccessCreateOrEdit}
             />

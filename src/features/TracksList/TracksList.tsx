@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Track } from '../../api/types';
 import styles from './TracksList.module.scss';
 
 interface Props {
   tracks: Track[];
+  selectedTracksIds: string[];
   handlePlayClick: (track: Track) => void;
   handleEditClick: (track: Track) => void;
   handleDeleteClick: (track: Track) => void;
@@ -13,21 +14,20 @@ interface Props {
 
 const TracksList = ({
   tracks,
+  selectedTracksIds,
   handlePlayClick,
   handleEditClick,
   handleDeleteClick,
   handleUploadClick,
   handleSelectionChange,
 }: Props) => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
   const handleCheckboxChange = (id: string) => {
-    const newSelected = selectedIds.includes(id)
-      ? selectedIds.filter((selectedId) => selectedId !== id)
-      : [...selectedIds, id];
+    const isSelected = selectedTracksIds.includes(id);
+    const updatedSelected = isSelected
+      ? selectedTracksIds.filter((trackId) => trackId !== id)
+      : [...selectedTracksIds, id];
 
-    setSelectedIds(newSelected);
-    handleSelectionChange(newSelected);
+    handleSelectionChange(updatedSelected);
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -41,7 +41,7 @@ const TracksList = ({
           <div className={styles.trackInfo}>
             <input
               type="checkbox"
-              checked={selectedIds.includes(track.id)}
+              checked={selectedTracksIds.includes(track.id)}
               onChange={() => handleCheckboxChange(track.id)}
               className={styles.checkbox}
               aria-label="Select track"
