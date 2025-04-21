@@ -12,7 +12,6 @@ const TracksModals = ({
   onClose,
   onSuccess,
   onUploadFileClick,
-  reloadTracks,
 }: {
   show: boolean;
   type: string;
@@ -44,14 +43,7 @@ const TracksModals = ({
         />
       )}
       {type === 'upload-file' && editingTrack && (
-        <UploadTrackModalContent
-          track={editingTrack}
-          onClose={onClose}
-          onUploaded={async () => {
-            await reloadTracks();
-            onClose();
-          }}
-        />
+        <UploadTrackModalContent track={editingTrack} onClose={onClose} onUploaded={onSuccess} />
       )}
     </Modal>
   );
