@@ -13,6 +13,7 @@ import GenreSelect from '../../features/GenreSelect/GenreSelect';
 import Modal from '../../components/Modal/Modal';
 import TrackMetadataForm from '../../features/TrackMetadataForm/TrackMetadataForm';
 import DeleteTrackModalContent from '../../features/DeleteTrackModalContent/DeleteTrackModalContent';
+import UploadTrackModalContent from '../../features/UploadTrackModalContent/UploadTrackModalContent';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,7 @@ const TracksPage = () => {
   const [sortBy, setSortBy] = useState<Sort>('createdAt');
   const [sortOrder, setSortOrder] = useState<Order>('desc');
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<'create-or-edit' | 'delete' | ''>('');
+  const [modalType, setModalType] = useState<'create-or-edit' | 'delete' | 'upload-file' | ''>('');
   const debouncedSearchText = useMemo(
     () => debounce((value: string) => setDebouncedSearch(value), 500),
     []
@@ -110,6 +111,12 @@ const TracksPage = () => {
   const handleDeleteClick = (track: Track) => {
     setEditingTrack(track);
     setModalType('delete');
+    setShowModal(true);
+  };
+
+  const handleUploadFileClick = (track: Track) => {
+    setEditingTrack(track);
+    setModalType('upload-file');
     setShowModal(true);
   };
 
@@ -203,7 +210,7 @@ const TracksPage = () => {
               handlePlayClick={(track) => setCurrentTrack(track)}
               handleEditClick={handleEditClick}
               handleDeleteClick={handleDeleteClick}
-              handleUploadClick={(track) => console.log('Upload', track)}
+              handleUploadClick={handleUploadFileClick}
             />
           </>
         )}
@@ -244,6 +251,17 @@ const TracksPage = () => {
               trackTitle={editingTrack.title}
               onClose={handleCloseModal}
               onDeleted={handleSuccessCreateOrEdit}
+            />
+          )}
+
+          {modalType === 'upload-file' && editingTrack && (
+            <UploadTrackModalContent
+              track={editingTrack}
+              onClose={handleCloseModal}
+              onUploaded={async () => {
+                await loadTracks(currentPage);
+                handleCloseModal();
+              }}
             />
           )}
         </Modal>
