@@ -19,7 +19,7 @@ const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tracks, setTracks] = useState<Track[] | []>([]);
   const [totalTracks, setTotalTracks] = useState(0);
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [playerTrack, setPlayerTrack] = useState<Track | null>(null);
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -58,9 +58,6 @@ const TracksPage = () => {
       setTracks(res.data);
       setTotalPages(res.meta.totalPages);
       setTotalTracks(res.meta.total);
-      if (res.data.length > 0) {
-        setCurrentTrack(res.data[0]);
-      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -69,22 +66,24 @@ const TracksPage = () => {
   };
 
   const handleNext = () => {
-    if (!currentTrack) return;
+    if (!playerTrack) return;
 
-    const currentIndex = tracks.findIndex((track) => track.id === currentTrack.id);
-    if (currentIndex !== -1 && currentIndex < tracks.length - 1) {
-      const nextTrack = tracks[currentIndex + 1];
-      setCurrentTrack(nextTrack);
+    const playableTracks = tracks.filter((t) => t.audioFile);
+    const currentIndex = playableTracks.findIndex((t) => t.id === playerTrack.id);
+
+    if (currentIndex !== -1 && currentIndex < playableTracks.length - 1) {
+      setPlayerTrack(playableTracks[currentIndex + 1]);
     }
   };
 
   const handlePrev = () => {
-    if (!currentTrack) return;
+    if (!playerTrack) return;
 
-    const currentIndex = tracks.findIndex((track) => track.id === currentTrack.id);
+    const playableTracks = tracks.filter((t) => t.audioFile);
+    const currentIndex = playableTracks.findIndex((t) => t.id === playerTrack.id);
+
     if (currentIndex > 0) {
-      const prevTrack = tracks[currentIndex - 1];
-      setCurrentTrack(prevTrack);
+      setPlayerTrack(playableTracks[currentIndex - 1]);
     }
   };
 
@@ -142,8 +141,8 @@ const TracksPage = () => {
   return (
     <>
       <div className={styles.page}>
-        {currentTrack && (
-          <TrackAudioPlayer track={currentTrack} onNext={handleNext} onPrev={handlePrev} />
+        {playerTrack && (
+          <TrackAudioPlayer track={playerTrack} onNext={handleNext} onPrev={handlePrev} />
         )}
         <header className={styles.header}>
           <h1 data-testid="tracks-header">Tracks</h1>
@@ -207,7 +206,7 @@ const TracksPage = () => {
             <p>Tracks found {totalTracks}</p>
             <TracksList
               tracks={tracks}
-              handlePlayClick={(track) => setCurrentTrack(track)}
+              handlePlayClick={setPlayerTrack}
               handleEditClick={handleEditClick}
               handleDeleteClick={handleDeleteClick}
               handleUploadClick={handleUploadFileClick}
