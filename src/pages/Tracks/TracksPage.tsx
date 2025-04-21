@@ -18,6 +18,7 @@ import UploadTrackModalContent from '../../features/UploadTrackModalContent/Uplo
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tracks, setTracks] = useState<Track[] | []>([]);
+  const [selectedTracksIds, setSelectedTracksIds] = useState<string[]>([]);
   const [totalTracks, setTotalTracks] = useState(0);
   const [playerTrack, setPlayerTrack] = useState<Track | null>(null);
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
@@ -195,6 +196,17 @@ const TracksPage = () => {
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </Select>
+          {selectedTracksIds.length > 0 && (
+            <Button
+              variant="primary"
+              data-testid="action-button"
+              onClick={() => {
+                
+              }}
+            >
+              Actions
+            </Button>
+          )}
         </div>
 
         {isLoading ? (
@@ -210,6 +222,7 @@ const TracksPage = () => {
               handleEditClick={handleEditClick}
               handleDeleteClick={handleDeleteClick}
               handleUploadClick={handleUploadFileClick}
+              handleSelectionChange={setSelectedTracksIds}
             />
           </>
         )}

@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Track } from '../../api/types';
 import styles from './TracksList.module.scss';
 
@@ -7,6 +8,7 @@ interface Props {
   handleEditClick: (track: Track) => void;
   handleDeleteClick: (track: Track) => void;
   handleUploadClick: (track: Track) => void;
+  handleSelectionChange: (selectedIds: string[]) => void;
 }
 
 const TracksList = ({
@@ -15,7 +17,19 @@ const TracksList = ({
   handleEditClick,
   handleDeleteClick,
   handleUploadClick,
+  handleSelectionChange,
 }: Props) => {
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const handleCheckboxChange = (id: string) => {
+    const newSelected = selectedIds.includes(id)
+      ? selectedIds.filter((selectedId) => selectedId !== id)
+      : [...selectedIds, id];
+
+    setSelectedIds(newSelected);
+    handleSelectionChange(newSelected);
+  };
+
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = '/headphones.svg';
   };
@@ -25,6 +39,13 @@ const TracksList = ({
       {tracks.map((track: Track) => (
         <li key={track.id} data-testid={`track-item-${track.id}`} className={styles.track}>
           <div className={styles.trackInfo}>
+            <input
+              type="checkbox"
+              checked={selectedIds.includes(track.id)}
+              onChange={() => handleCheckboxChange(track.id)}
+              className={styles.checkbox}
+              aria-label="Select track"
+            />
             <button
               className={styles.playButton}
               data-testid={`play-button-${track.id}`}
