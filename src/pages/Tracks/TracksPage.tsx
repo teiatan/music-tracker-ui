@@ -3,7 +3,7 @@ import styles from './TracksPage.module.scss';
 import TracksList from '../../features/TracksList/TracksList';
 import Pagination from '../../components/Pagination/Pagination';
 import TrackAudioPlayer from '../../features/TrackAudioPlayer/TrackAudioPlayer';
-import { useTracksPage } from '../../utils/useTracks';
+import { useTracks } from '../../utils/useTracks';
 import TracksHeader from '../../features/TracksHeader/TracksHeader';
 import TracksControls from '../../features/TracksControls/TracksControls';
 import TracksModals from '../../features/TracksModalManager/TracksModalManager';
@@ -30,7 +30,7 @@ const TracksPage = () => {
       audioRef,
     },
     handlers,
-  } = useTracksPage();
+  } = useTracks();
 
   return (
     <>

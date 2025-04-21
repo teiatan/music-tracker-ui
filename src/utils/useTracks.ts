@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 import { getTracks } from '../api/getTracks.api';
 import { Order, Sort, Track } from '../api/types';
 
-export const useTracksPage = () => {
+export const useTracks = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [selectedTracksIds, setSelectedTracksIds] = useState<string[]>([]);
@@ -60,8 +60,6 @@ export const useTracksPage = () => {
       return;
     }
     setPlayerTrack(track);
-    setTimeout(() => audioRef.current?.play(), 0);
-    setIsPlaying(true);
   };
 
   const handlePauseClick = () => {
@@ -129,6 +127,14 @@ export const useTracksPage = () => {
   useEffect(() => {
     void loadTracks(currentPage);
   }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
+
+  useEffect(() => {
+    if (playerTrack && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(console.error);
+      setIsPlaying(true);
+    }
+  }, [playerTrack]);
 
   return {
     state: {
