@@ -18,6 +18,7 @@ const TracksPage = () => {
   const [tracks, setTracks] = useState<Track[] | []>([]);
   const [totalTracks, setTotalTracks] = useState(0);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [editingTrack, setEditingTrack] = useState<Track | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -93,10 +94,21 @@ const TracksPage = () => {
     setCurrentPage(1);
   };
 
+  const handleEditClick = (track: Track) => {
+    setEditingTrack(track);
+    setModalType('create-or-edit');
+    setShowModal(true);
+  };
+
   const handleSuccessCreateOrEdit = async () => {
+    if (!editingTrack) {
+      resetLoadedTracksParams();
+    } else {
+      loadTracks(currentPage);
+    }
     setShowModal(false);
     setModalType('');
-    resetLoadedTracksParams();
+    setEditingTrack(null);
   };
 
   useEffect(() => {
@@ -176,7 +188,7 @@ const TracksPage = () => {
             <TracksList
               tracks={tracks}
               handlePlayClick={(track) => setCurrentTrack(track)}
-              handleEditClick={(track) => console.log('Edit', track)}
+              handleEditClick={handleEditClick}
               handleDeleteClick={(track) => console.log('Delete', track)}
               handleUploadClick={(track) => console.log('Upload', track)}
             />
@@ -196,7 +208,21 @@ const TracksPage = () => {
       {showModal && modalType !== '' && (
         <Modal onClose={() => setShowModal(false)}>
           {modalType === 'create-or-edit' && (
-            <TrackMetadataForm onSuccess={handleSuccessCreateOrEdit} />
+            <TrackMetadataForm
+              initialValues={
+                editingTrack
+                  ? {
+                      title: editingTrack.title,
+                      artist: editingTrack.artist,
+                      album: editingTrack.album,
+                      genres: editingTrack.genres,
+                      coverImageUrl: editingTrack.coverImage,
+                    }
+                  : undefined
+              }
+              trackId={editingTrack?.id}
+              onSuccess={handleSuccessCreateOrEdit}
+            />
           )}
         </Modal>
       )}

@@ -5,6 +5,7 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import GenreSelect from '../GenreSelect/GenreSelect';
 import { createTrack } from '../../api/createTrack.api';
+import { updateTrack } from '../../api/updateTrack';
 
 export interface TrackMetadataFormValues {
   title: string;
@@ -16,10 +17,15 @@ export interface TrackMetadataFormValues {
 
 interface TrackMetadataFormProps {
   initialValues?: TrackMetadataFormValues;
+  trackId?: string;
   onSuccess?: () => void;
 }
 
-const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({ initialValues, onSuccess }) => {
+const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
+  initialValues,
+  trackId,
+  onSuccess,
+}) => {
   const [formData, setFormData] = useState<TrackMetadataFormValues>({
     title: '',
     artist: '',
@@ -74,19 +80,27 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({ initialValues, on
     if (!validate()) return;
 
     try {
-      await createTrack({
-        title: formData.title,
-        artist: formData.artist,
-        album: formData.album,
-        genres: formData.genres,
-        coverImage: formData.coverImageUrl,
-      });
-
-      if (onSuccess) {
-        onSuccess(); // повідомляємо, що трек створено
+      if (trackId) {
+        await updateTrack(trackId, {
+          title: formData.title,
+          artist: formData.artist,
+          album: formData.album,
+          genres: formData.genres,
+          coverImage: formData.coverImageUrl,
+        });
+      } else {
+        await createTrack({
+          title: formData.title,
+          artist: formData.artist,
+          album: formData.album,
+          genres: formData.genres,
+          coverImage: formData.coverImageUrl,
+        });
       }
+
+      onSuccess?.();
     } catch (err) {
-      console.error('Failed to create track', err);
+      console.error('Failed to submit track', err);
     }
   };
 
