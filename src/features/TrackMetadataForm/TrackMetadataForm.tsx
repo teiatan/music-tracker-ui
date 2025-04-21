@@ -40,7 +40,6 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [newGenre, setNewGenre] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -62,16 +61,6 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
 
   const handleChange = (field: keyof TrackMetadataFormValues, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleAddGenre = () => {
-    if (newGenre && !formData.genres.includes(newGenre)) {
-      setFormData((prev) => ({
-        ...prev,
-        genres: [...prev.genres, newGenre],
-      }));
-    }
-    setNewGenre('');
   };
 
   const handleRemoveGenre = (genre: string) => {
@@ -162,6 +151,16 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
 
       <div className={styles.genresBlock}>
         <label className={styles.label}>Genres</label>
+        <GenreSelect
+          mode="button"
+          excludeGenres={formData.genres}
+          onGenreClick={(genre) =>
+            setFormData((prev) => ({
+              ...prev,
+              genres: [...prev.genres, genre],
+            }))
+          }
+        />
         <div className={styles.tags} data-testid="genre-selector">
           {formData.genres.map((genre) => (
             <span key={genre} className={styles.tag}>
@@ -171,12 +170,6 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
               </button>
             </span>
           ))}
-        </div>
-        <div className={styles.genreSelectWrapper}>
-          <GenreSelect value={newGenre} onChange={(e) => setNewGenre(e.target.value)} />
-          <Button type="button" size="sm" onClick={handleAddGenre}>
-            Add
-          </Button>
         </div>
       </div>
 
