@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './TracksPage.module.scss';
 import { Order, Sort, Track } from '../../api/types';
 import Button from '../../components/Button/Button';
@@ -9,6 +9,7 @@ import Pagination from '../../components/Pagination/Pagination';
 import { getGenres } from '../../api/getGenres.api';
 import Select from '../../components/Select/Select';
 import Input from '../../components/Input/Input';
+import debounce from 'lodash/debounce';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,18 @@ const TracksPage = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [sortBy, setSortBy] = useState<Sort>('createdAt');
   const [sortOrder, setSortOrder] = useState<Order>('asc');
+  const debouncedSearchText = useMemo(
+    () => debounce((value: string) => setDebouncedSearch(value), 500),
+    []
+  );
+  const [debouncedSearch, setDebouncedSearch] = useState(searchText);
+
+  useEffect(() => {
+    debouncedSearchText(searchText);
+    return () => {
+      debouncedSearchText.cancel();
+    };
+  }, [searchText]);
 
   const handleNext = () => {
     if (!currentTrack) return;
@@ -45,6 +58,10 @@ const TracksPage = () => {
   };
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
+
+  useEffect(() => {
     const fetchTracks = async () => {
       setIsLoading(true);
       try {
@@ -53,7 +70,7 @@ const TracksPage = () => {
           limit: itemsPerPage,
           sort: sortBy,
           order: sortOrder,
-          search: searchText,
+          search: debouncedSearch,
           genre: selectedGenre,
         });
         setTracks(res.data);
@@ -70,7 +87,7 @@ const TracksPage = () => {
     };
 
     fetchTracks();
-  }, [currentPage, itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
+  }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -88,7 +105,7 @@ const TracksPage = () => {
 
   return (
     <div className={styles.page}>
-      {tracks.length > 0 && currentTrack && (
+      {currentTrack && (
         <TrackAudioPlayer track={currentTrack} onNext={handleNext} onPrev={handlePrev} />
       )}
       <header className={styles.header}>
@@ -110,6 +127,7 @@ const TracksPage = () => {
           data-testid="search-input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
+          className={styles.searchInput}
         />
         <Select
           title="Genre"
@@ -169,13 +187,15 @@ const TracksPage = () => {
         </>
       )}
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-        itemsPerPage={itemsPerPage}
-        onItemsPerPageChange={setItemsPerPage}
-      />
+      {totalTracks > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={setItemsPerPage}
+        />
+      )}
     </div>
   );
 };

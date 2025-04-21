@@ -38,7 +38,11 @@
     margin-top: 2rem;
   }
   
-
+  .searchInput {
+    box-sizing: border-box;
+    min-width: 200px;
+  }
+  
   .select {
     display: inline-block;
   }
