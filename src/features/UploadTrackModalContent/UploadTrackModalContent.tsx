@@ -30,6 +30,12 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
       return;
     }
 
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setError('File is too large. Maximum size is 10MB.');
+      return;
+    }
+
     try {
       setIsProcessing(true);
       setError(null);
