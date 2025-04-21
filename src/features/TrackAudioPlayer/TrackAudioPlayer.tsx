@@ -6,22 +6,16 @@ interface Props {
   track: Track;
   onNext?: () => void;
   onPrev?: () => void;
+  handlePlaying?: (isPlaying: boolean) => void;
+  audioRef: React.RefObject<HTMLAudioElement | null>;
 }
 
-const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+const TrackAudioPlayer = ({ track, onNext, onPrev, handlePlaying, audioRef }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
   const contextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {});
-    }
-  }, [track.id]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -35,7 +29,6 @@ const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
 
     const context = contextRef.current;
 
-    // ⚠️ avoid creating multiple sources for the same media element
     if (!sourceRef.current) {
       sourceRef.current = context.createMediaElementSource(audio);
     }
@@ -67,12 +60,9 @@ const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
 
       for (let i = 0; i < bufferLength; i++) {
         const value = dataArray[i];
-        const barHeight = Math.min(value / 2, 30); // 👈 capped height for elegance
-
-        // градієнт для глибини
+        const barHeight = Math.min(value / 2, 30);
         const gradient = canvasCtx.createLinearGradient(0, 0, 0, canvas.height);
         gradient.addColorStop(0, '#1976d2');
-        // gradient.addColorStop(1, 'rgba(25, 118, 210, 0.1)');
 
         canvasCtx.fillStyle = gradient;
         canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
@@ -134,7 +124,10 @@ const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
           <audio
             ref={audioRef}
             controls
+            data-testid={`audio-player-${track.id}`}
             onEnded={handleEnded}
+            onPause={() => handlePlaying?.(false)}
+            onPlay={() => handlePlaying?.(true)}
             crossOrigin="anonymous"
             src={`${import.meta.env.VITE_API_BASE_URL}api/files/${track.audioFile}`}
           />

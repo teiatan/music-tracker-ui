@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './TracksPage.module.scss';
 import { Order, Sort, Track } from '../../api/types';
 import Button from '../../components/Button/Button';
@@ -20,6 +20,7 @@ const TracksPage = () => {
   const [tracks, setTracks] = useState<Track[] | []>([]);
   const [selectedTracksIds, setSelectedTracksIds] = useState<string[]>([]);
   const [totalTracks, setTotalTracks] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [playerTrack, setPlayerTrack] = useState<Track | null>(null);
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,6 +65,35 @@ const TracksPage = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const handlePlayClick = (track: Track) => {
+    if (track.id === playerTrack?.id) {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+      audioRef.current?.play();
+      setIsPlaying(true);
+      return;
+    }
+
+    setPlayerTrack(track);
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+      audioRef.current?.play();
+      setIsPlaying(true);
+    }, 0);
+  };
+
+  const handlePauseClick = () => {
+    setIsPlaying(false);
+    audioRef.current?.pause();
   };
 
   const handleNext = () => {
@@ -148,7 +178,13 @@ const TracksPage = () => {
     <>
       <div className={styles.page}>
         {playerTrack && (
-          <TrackAudioPlayer track={playerTrack} onNext={handleNext} onPrev={handlePrev} />
+          <TrackAudioPlayer
+            track={playerTrack}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            handlePlaying={setIsPlaying}
+            audioRef={audioRef}
+          />
         )}
         <header className={styles.header}>
           <h1 data-testid="tracks-header">Tracks</h1>
@@ -224,8 +260,11 @@ const TracksPage = () => {
             <p>Tracks found {totalTracks}</p>
             <TracksList
               tracks={tracks}
+              playerTrack={playerTrack}
+              isPlaying={isPlaying}
               selectedTracksIds={selectedTracksIds}
-              handlePlayClick={setPlayerTrack}
+              handlePlayClick={handlePlayClick}
+              handlePauseClick={handlePauseClick}
               handleEditClick={handleEditClick}
               handleDeleteClick={handleDeleteClick}
               handleUploadClick={handleUploadFileClick}

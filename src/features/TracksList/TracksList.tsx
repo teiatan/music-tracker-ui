@@ -4,8 +4,11 @@ import styles from './TracksList.module.scss';
 
 interface Props {
   tracks: Track[];
+  playerTrack: Track | null;
+  isPlaying: boolean;
   selectedTracksIds: string[];
   handlePlayClick: (track: Track) => void;
+  handlePauseClick: () => void;
   handleEditClick: (track: Track) => void;
   handleDeleteClick: (track: Track) => void;
   handleUploadClick: (track: Track) => void;
@@ -14,8 +17,11 @@ interface Props {
 
 const TracksList = ({
   tracks,
+  playerTrack,
+  isPlaying,
   selectedTracksIds,
   handlePlayClick,
+  handlePauseClick,
   handleEditClick,
   handleDeleteClick,
   handleUploadClick,
@@ -46,14 +52,27 @@ const TracksList = ({
               className={styles.checkbox}
               aria-label="Select track"
             />
-            <button
-              className={styles.playButton}
-              data-testid={`play-button-${track.id}`}
-              onClick={() => (track.audioFile ? handlePlayClick(track) : handleUploadClick(track))}
-              aria-label="Play"
-            >
-              {track.audioFile ? '▶' : '⬆'}
-            </button>
+            {playerTrack?.id === track.id && isPlaying ? (
+              <button
+                className={styles.playButton}
+                data-testid={`pause-button-${track.id}`}
+                onClick={handlePauseClick}
+                aria-label="Pause"
+              >
+                ⏸
+              </button>
+            ) : (
+              <button
+                className={styles.playButton}
+                data-testid={`play-button-${track.id}`}
+                onClick={() =>
+                  track.audioFile ? handlePlayClick(track) : handleUploadClick(track)
+                }
+                aria-label="Play"
+              >
+                {track.audioFile ? '▶' : '⬆'}
+              </button>
+            )}
             <img
               src={track.coverImage || '/headphones.svg'}
               alt="Cover"
