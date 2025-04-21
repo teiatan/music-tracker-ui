@@ -63,3 +63,31 @@
     background-color: #1565c0;
   }
   
+  .coverImage {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 12px;
+  }
+  
+  .trackAlbum {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 2px;
+  }
+  
+  .uploadButton {
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    margin-right: 12px;
+    font-size: 0.85em;
+  }
+  
+  .uploadButton:hover {
+    background-color: #d0d0d0;
+  }
+  
