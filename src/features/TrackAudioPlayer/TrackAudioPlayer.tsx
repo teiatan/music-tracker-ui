@@ -60,14 +60,24 @@ const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
       analyser.getByteFrequencyData(dataArray);
 
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-      const barWidth = (canvas.width / bufferLength) * 2.5;
+
+      const barWidth = 2;
+      const barGap = 1;
       let x = 0;
 
       for (let i = 0; i < bufferLength; i++) {
-        const barHeight = dataArray[i];
-        canvasCtx.fillStyle = '#1976d2';
-        canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
-        x += barWidth + 1;
+        const value = dataArray[i];
+        const barHeight = Math.min(value / 2, 30); // 👈 capped height for elegance
+
+        // градієнт для глибини
+        const gradient = canvasCtx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#1976d2');
+        // gradient.addColorStop(1, 'rgba(25, 118, 210, 0.1)');
+
+        canvasCtx.fillStyle = gradient;
+        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        x += barWidth + barGap;
       }
     };
 
