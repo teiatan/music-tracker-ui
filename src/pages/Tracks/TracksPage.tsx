@@ -12,6 +12,7 @@ import debounce from 'lodash/debounce';
 import GenreSelect from '../../features/GenreSelect/GenreSelect';
 import Modal from '../../components/Modal/Modal';
 import TrackMetadataForm from '../../features/TrackMetadataForm/TrackMetadataForm';
+import DeleteTrackModalContent from '../../features/DeleteTrackModalContent/DeleteTrackModalContent';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -94,9 +95,21 @@ const TracksPage = () => {
     setCurrentPage(1);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalType('');
+    setEditingTrack(null);
+  };
+
   const handleEditClick = (track: Track) => {
     setEditingTrack(track);
     setModalType('create-or-edit');
+    setShowModal(true);
+  };
+
+  const handleDeleteClick = (track: Track) => {
+    setEditingTrack(track);
+    setModalType('delete');
     setShowModal(true);
   };
 
@@ -189,7 +202,7 @@ const TracksPage = () => {
               tracks={tracks}
               handlePlayClick={(track) => setCurrentTrack(track)}
               handleEditClick={handleEditClick}
-              handleDeleteClick={(track) => console.log('Delete', track)}
+              handleDeleteClick={handleDeleteClick}
               handleUploadClick={(track) => console.log('Upload', track)}
             />
           </>
@@ -206,7 +219,7 @@ const TracksPage = () => {
         )}
       </div>
       {showModal && modalType !== '' && (
-        <Modal onClose={() => setShowModal(false)}>
+        <Modal onClose={handleCloseModal}>
           {modalType === 'create-or-edit' && (
             <TrackMetadataForm
               initialValues={
@@ -222,6 +235,15 @@ const TracksPage = () => {
               }
               trackId={editingTrack?.id}
               onSuccess={handleSuccessCreateOrEdit}
+            />
+          )}
+
+          {modalType === 'delete' && editingTrack && (
+            <DeleteTrackModalContent
+              trackId={editingTrack.id}
+              trackTitle={editingTrack.title}
+              onClose={handleCloseModal}
+              onDeleted={handleSuccessCreateOrEdit}
             />
           )}
         </Modal>

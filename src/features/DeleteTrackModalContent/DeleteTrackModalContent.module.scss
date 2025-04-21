@@ -1,0 +1,16 @@
+.modal {
+  padding: 1rem;
+  background-color: white;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 0.5rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
