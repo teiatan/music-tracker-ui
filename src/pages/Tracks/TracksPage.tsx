@@ -6,7 +6,7 @@ import TrackAudioPlayer from '../../features/TrackAudioPlayer/TrackAudioPlayer';
 import { useTracks } from '../../utils/useTracks';
 import TracksHeader from '../../features/TracksHeader/TracksHeader';
 import TracksControls from '../../features/TracksControls/TracksControls';
-import TracksModals from '../../features/TracksModalManager/TracksModalManager';
+import TracksModals from '../../features/TracksModals/TracksModals';
 
 const TracksPage = () => {
   const {

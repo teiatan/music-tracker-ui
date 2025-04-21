@@ -1,7 +1,7 @@
 import Modal from '../../components/Modal/Modal';
-import TrackMetadataForm from '../../features/TrackMetadataForm/TrackMetadataForm';
-import DeleteTrackModalContent from '../../features/DeleteTrackModalContent/DeleteTrackModalContent';
-import UploadTrackModalContent from '../../features/UploadTrackModalContent/UploadTrackModalContent';
+import TrackMetadataForm from '../TrackMetadataForm/TrackMetadataForm';
+import DeleteTrackModalContent from '../DeleteTrackModalContent/DeleteTrackModalContent';
+import UploadTrackModalContent from '../UploadTrackModalContent/UploadTrackModalContent';
 import { Track } from '../../api/types';
 
 const TracksModals = ({
