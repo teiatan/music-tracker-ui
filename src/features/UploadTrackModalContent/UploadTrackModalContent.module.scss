@@ -1,20 +1,38 @@
 .modal {
-    padding: 1rem;
-    background-color: white;
-  }
-  
-  .input {
-    margin: 1rem 0;
-  }
-  
-  .error {
-    color: #dc2626;
-    margin-top: 0.5rem;
-  }
-  
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-  }
-  
+  padding: 1rem;
+  background-color: white;
+}
+
+.input {
+  margin: 1rem 0;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.info {
+  margin-bottom: 1rem;
+}
+
+.input {
+  margin: 1rem 0;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}

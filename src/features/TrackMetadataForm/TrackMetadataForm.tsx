@@ -6,6 +6,8 @@ import Button from '../../components/Button/Button';
 import GenreSelect from '../GenreSelect/GenreSelect';
 import { createTrack } from '../../api/createTrack.api';
 import { updateTrack } from '../../api/updateTrack';
+import { deleteTrackFile } from '../../api/deleteTrackFile.api';
+import { Track } from '../../api/types';
 
 export interface TrackMetadataFormValues {
   title: string;
@@ -16,14 +18,16 @@ export interface TrackMetadataFormValues {
 }
 
 interface TrackMetadataFormProps {
-  initialValues?: TrackMetadataFormValues;
+  initialValues?: Track;
   trackId?: string;
+  onUploadFileClick?: () => void;
   onSuccess?: () => void;
 }
 
 const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
   initialValues,
   trackId,
+  onUploadFileClick,
   onSuccess,
 }) => {
   const [formData, setFormData] = useState<TrackMetadataFormValues>({
@@ -37,6 +41,8 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [newGenre, setNewGenre] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const validate = (): boolean => {
     const errs: Record<string, string> = {};
@@ -73,6 +79,23 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
       ...prev,
       genres: prev.genres.filter((g) => g !== genre),
     }));
+  };
+
+  const handleDeleteAudioFile = async () => {
+    if (!trackId) return;
+
+    try {
+      setIsDeleting(true);
+      setDeleteError(null);
+
+      await deleteTrackFile(trackId);
+      onSuccess?.();
+    } catch (err) {
+      console.error('Failed to delete audio file', err);
+      setDeleteError('Failed to delete audio file.');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,6 +189,37 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
       {errors.coverImageUrl && (
         <div className={styles.error} data-testid="error-coverImageUrl">
           {errors.coverImageUrl}
+        </div>
+      )}
+
+      {trackId && (
+        <div className={styles.audioBlock}>
+          <label className={styles.label}>Audio File</label>
+
+          {initialValues?.audioFile ? (
+            <div className={styles.audioInfo}>
+              <p className={styles.fileName}>Current file: {initialValues.audioFile}</p>
+              <div className={styles.audioActions}>
+                <Button type="button" size="sm" onClick={onUploadFileClick}>
+                  Replace File
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="danger"
+                  onClick={handleDeleteAudioFile}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete File'}
+                </Button>
+              </div>
+              {deleteError && <p className={styles.error}>{deleteError}</p>}
+            </div>
+          ) : (
+            <Button type="button" size="sm" onClick={onUploadFileClick}>
+              Upload File
+            </Button>
+          )}
         </div>
       )}
 

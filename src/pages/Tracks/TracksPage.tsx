@@ -229,18 +229,11 @@ const TracksPage = () => {
         <Modal onClose={handleCloseModal}>
           {modalType === 'create-or-edit' && (
             <TrackMetadataForm
-              initialValues={
-                editingTrack
-                  ? {
-                      title: editingTrack.title,
-                      artist: editingTrack.artist,
-                      album: editingTrack.album,
-                      genres: editingTrack.genres,
-                      coverImageUrl: editingTrack.coverImage,
-                    }
-                  : undefined
-              }
+              initialValues={editingTrack ? editingTrack : undefined}
               trackId={editingTrack?.id}
+              onUploadFileClick={() => {
+                setModalType('upload-file');
+              }}
               onSuccess={handleSuccessCreateOrEdit}
             />
           )}

@@ -3,6 +3,7 @@ import Button from '../../components/Button/Button';
 import styles from './UploadTrackModalContent.module.scss';
 import { Track } from '../../api/types';
 import { uploadTrackFile } from '../../api/uploadTrackFile.api';
+import { deleteTrackFile } from '../../api/deleteTrackFile.api';
 
 interface Props {
   track: Track | null;
@@ -12,7 +13,7 @@ interface Props {
 
 const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }) => {
   const [error, setError] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUpload = async () => {
@@ -25,22 +26,36 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
 
     const allowedTypes = ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/x-wav'];
     if (!allowedTypes.includes(file.type)) {
-      setError('Only mp3 and wav files are allowed.');
+      setError('Only MP3 and WAV files are allowed.');
       return;
     }
 
     try {
-      setIsUploading(true);
+      setIsProcessing(true);
       setError(null);
 
       await uploadTrackFile(track!.id, file);
-
       onUploaded();
     } catch (err) {
       console.error(err);
       setError('Upload failed. Try again.');
     } finally {
-      setIsUploading(false);
+      setIsProcessing(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setIsProcessing(true);
+      setError(null);
+
+      await deleteTrackFile(track!.id);
+      onUploaded();
+    } catch (err) {
+      console.error(err);
+      setError('Failed to delete file. Try again.');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -50,10 +65,19 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
       <p>{track ? `Track: ${track.title}` : 'No track selected'}</p>
 
       {track?.audioFile && (
-        <p>
-          Existing file: <strong>{track.audioFile}</strong> — will be replaced if you upload a new
-          one.
-        </p>
+        <div className={styles.info}>
+          <p>
+            Existing file: <strong>{track.audioFile}</strong>
+          </p>
+          <Button
+            variant="danger"
+            onClick={handleDelete}
+            disabled={isProcessing}
+            data-testid="delete-audio-file"
+          >
+            Delete File
+          </Button>
+        </div>
       )}
 
       <input
@@ -63,13 +87,14 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
         data-testid="upload-file-input"
         className={styles.input}
       />
+
       {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.actions}>
-        <Button onClick={handleUpload} disabled={isUploading}>
-          {isUploading ? 'Uploading...' : 'Upload'}
+        <Button onClick={handleUpload} disabled={isProcessing}>
+          {isProcessing ? 'Uploading...' : 'Upload'}
         </Button>
-        <Button variant="secondary" onClick={onClose} disabled={isUploading}>
+        <Button variant="secondary" onClick={onClose} disabled={isProcessing}>
           Cancel
         </Button>
       </div>
