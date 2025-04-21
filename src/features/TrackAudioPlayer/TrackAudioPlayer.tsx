@@ -55,7 +55,7 @@ const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
             controls
             onEnded={handleEnded}
             data-testid={`audio-player-${track.id}`}
-            src={track.audioFile}
+            src={`${import.meta.env.VITE_API_BASE_URL}api/files/${track.audioFile}`}
           />
           <button onClick={onNext} aria-label="Next track">
             ▶
