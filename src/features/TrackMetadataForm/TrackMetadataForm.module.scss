@@ -1,0 +1,65 @@
+.form {
+    width: 500px;
+    max-width: calc(100vw - 20px);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: white;
+  }
+  
+  .error {
+    color: #dc2626;
+    font-size: 0.875rem;
+  }
+  
+  .genresBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .label {
+    font-weight: 600;
+  }
+  
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .tag {
+    background-color: #e5e7eb;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+  
+    button {
+      margin-left: 0.5rem;
+      background: none;
+      border: none;
+      color: #dc2626;
+      cursor: pointer;
+    }
+  }
+  
+  .genreSelectWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  
+    img {
+      width: 150px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+    }
+  }
+  

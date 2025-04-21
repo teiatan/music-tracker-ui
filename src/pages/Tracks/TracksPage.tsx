@@ -10,6 +10,8 @@ import Select from '../../components/Select/Select';
 import Input from '../../components/Input/Input';
 import debounce from 'lodash/debounce';
 import GenreSelect from '../../features/GenreSelect/GenreSelect';
+import Modal from '../../components/Modal/Modal';
+import TrackMetadataForm from '../../features/TrackMetadataForm/TrackMetadataForm';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +24,9 @@ const TracksPage = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const [sortBy, setSortBy] = useState<Sort>('createdAt');
-  const [sortOrder, setSortOrder] = useState<Order>('asc');
+  const [sortOrder, setSortOrder] = useState<Order>('desc');
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<'create-or-edit' | 'delete' | ''>('');
   const debouncedSearchText = useMemo(
     () => debounce((value: string) => setDebouncedSearch(value), 500),
     []
@@ -35,6 +39,31 @@ const TracksPage = () => {
       debouncedSearchText.cancel();
     };
   }, [searchText]);
+
+  const loadTracks = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const res = await getTracks({
+        page,
+        limit: itemsPerPage,
+        sort: sortBy,
+        order: sortOrder,
+        search: debouncedSearch,
+        genre: selectedGenre,
+      });
+
+      setTracks(res.data);
+      setTotalPages(res.meta.totalPages);
+      setTotalTracks(res.meta.total);
+      if (res.data.length > 0) {
+        setCurrentTrack(res.data[0]);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleNext = () => {
     if (!currentTrack) return;
@@ -56,36 +85,26 @@ const TracksPage = () => {
     }
   };
 
+  const resetLoadedTracksParams = () => {
+    setSortBy('createdAt');
+    setSortOrder('desc');
+    setSelectedGenre('');
+    setSearchText('');
+    setCurrentPage(1);
+  };
+
+  const handleSuccessCreateOrEdit = async () => {
+    setShowModal(false);
+    setModalType('');
+    resetLoadedTracksParams();
+  };
+
   useEffect(() => {
     setCurrentPage(1);
   }, [itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
 
   useEffect(() => {
-    const fetchTracks = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getTracks({
-          page: currentPage,
-          limit: itemsPerPage,
-          sort: sortBy,
-          order: sortOrder,
-          search: debouncedSearch,
-          genre: selectedGenre,
-        });
-        setTracks(res.data);
-        setTotalPages(res.meta.totalPages);
-        setTotalTracks(res.meta.total);
-        if (res.data.length > 0) {
-          setCurrentTrack(res.data[0]);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTracks();
+    loadTracks(currentPage);
   }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
 
   return (
@@ -100,7 +119,8 @@ const TracksPage = () => {
             variant="primary"
             data-testid="create-track-button"
             onClick={() => {
-              // Відкрити модалку
+              setShowModal(true);
+              setModalType('create-or-edit');
             }}
           >
             Create Track
@@ -173,7 +193,13 @@ const TracksPage = () => {
           />
         )}
       </div>
-      {/* <Modal></Modal> */}
+      {showModal && modalType !== '' && (
+        <Modal onClose={() => setShowModal(false)}>
+          {modalType === 'create-or-edit' && (
+            <TrackMetadataForm onSuccess={handleSuccessCreateOrEdit} />
+          )}
+        </Modal>
+      )}
     </>
   );
 };

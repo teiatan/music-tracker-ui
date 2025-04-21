@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TracksPage from './pages/Tracks/TracksPage';
 import NotFoundPage from './pages/NotFound/NotFoundPage';
+import './App.css';
 
 const App = () => {
   return (
