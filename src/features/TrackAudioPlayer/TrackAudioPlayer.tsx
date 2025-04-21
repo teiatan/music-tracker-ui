@@ -22,9 +22,18 @@ const TrackAudioPlayer = ({ track, onNext, onPrev }: Props) => {
     onNext?.();
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/headphones.svg';
+  };
+
   return (
     <div className={styles.player}>
-      <img src={track.coverImage} alt={track.title} className={styles.cover} />
+      <img
+        src={track.coverImage || '/headphones.svg'}
+        alt={track.title}
+        className={styles.cover}
+        onError={handleImageError}
+      />
       <div className={styles.info}>
         <h3>{track.title}</h3>
         <p>
