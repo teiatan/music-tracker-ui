@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import styles from './TracksPage.module.scss';
 import { Order, Sort, Track } from '../../api/types';
-// import Button from '../../components/Button/Button';
+import Button from '../../components/Button/Button';
 import { getTracks } from '../../api/getTracks.api';
 import TrackAudioPlayer from '../../features/TrackAudioPlayer/TrackAudioPlayer';
 import TracksList from '../../features/TracksList/TracksList';
 import Pagination from '../../components/Pagination/Pagination';
 import { getGenres } from '../../api/getGenres.api';
+import Select from '../../components/Select/Select';
+import Input from '../../components/Input/Input';
 
 const TracksPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,9 +20,8 @@ const TracksPage = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [genres, setGenres] = useState<string[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string>('');
-  const [selectedArtist, setSelectedArtist] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
-  const [sortBy, setSortBy] = useState<Sort>('title');
+  const [sortBy, setSortBy] = useState<Sort>('createdAt');
   const [sortOrder, setSortOrder] = useState<Order>('asc');
 
   const handleNext = () => {
@@ -54,7 +55,6 @@ const TracksPage = () => {
           order: sortOrder,
           search: searchText,
           genre: selectedGenre,
-          artist: selectedArtist,
         });
         setTracks(res.data);
         setTotalPages(res.meta.totalPages);
@@ -70,7 +70,7 @@ const TracksPage = () => {
     };
 
     fetchTracks();
-  }, [currentPage, itemsPerPage, searchText, selectedArtist, selectedGenre, sortBy, sortOrder]);
+  }, [currentPage, itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -91,7 +91,7 @@ const TracksPage = () => {
       {tracks.length > 0 && currentTrack && (
         <TrackAudioPlayer track={currentTrack} onNext={handleNext} onPrev={handlePrev} />
       )}
-      {/* <header className={styles.header}>
+      <header className={styles.header}>
         <h1 data-testid="tracks-header">Tracks</h1>
         <Button
           variant="primary"
@@ -105,35 +105,52 @@ const TracksPage = () => {
       </header>
 
       <div className={styles.controls}>
-        <input
-          type="text"
-          placeholder="Search..."
+        <Input
+          title="Search"
           data-testid="search-input"
-          className={styles.input}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
         />
+        <Select
+          title="Genre"
+          data-testid="genre-select"
+          value={selectedGenre}
+          onChange={(e) => setSelectedGenre(e.target.value)}
+          className={styles.genreSelect}
+        >
+          <option value="">Select genre</option>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
+        </Select>
 
-        <select data-testid="sort-select" className={styles.select}>
-          <option value="">Sort by</option>
+        <Select
+          title="Sort by"
+          data-testid="sort-select"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as Sort)}
+          className={styles.sortBySelect}
+        >
           <option value="title">Title</option>
           <option value="artist">Artist</option>
           <option value="album">Album</option>
-          <option value="createdAt">Created</option>
-        </select>
+          <option value="createdAt">Created date</option>
+        </Select>
 
-        <input
-          type="text"
-          placeholder="Filter by genre"
-          data-testid="filter-genre"
-          className={styles.input}
-        />
-
-        <input
-          type="text"
-          placeholder="Filter by artist"
-          data-testid="filter-artist"
-          className={styles.input}
-        />
-      </div> */}
+        <Select
+          title="Sort order"
+          data-testid="order-select"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as Order)}
+          className={styles.orderSelect}
+        >
+          <option value="">Sort order</option>
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </Select>
+      </div>
 
       {isLoading ? (
         <div data-testid="loading-tracks" data-loading="true">
