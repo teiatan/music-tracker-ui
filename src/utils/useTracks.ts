@@ -1,0 +1,175 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import debounce from 'lodash/debounce';
+import { getTracks } from '../api/getTracks.api';
+import { Order, Sort, Track } from '../api/types';
+
+export const useTracksPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [selectedTracksIds, setSelectedTracksIds] = useState<string[]>([]);
+  const [totalTracks, setTotalTracks] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playerTrack, setPlayerTrack] = useState<Track | null>(null);
+  const [editingTrack, setEditingTrack] = useState<Track | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [sortBy, setSortBy] = useState<Sort>('createdAt');
+  const [sortOrder, setSortOrder] = useState<Order>('desc');
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<'create-or-edit' | 'delete' | 'upload-file' | ''>('');
+  const debouncedSearchText = useMemo(
+    () => debounce((value: string) => setDebouncedSearch(value), 500),
+    []
+  );
+  const [debouncedSearch, setDebouncedSearch] = useState(searchText);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    debouncedSearchText(searchText);
+    return () => debouncedSearchText.cancel();
+  }, [searchText]);
+
+  const loadTracks = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const res = await getTracks({
+        page,
+        limit: itemsPerPage,
+        sort: sortBy,
+        order: sortOrder,
+        search: debouncedSearch,
+        genre: selectedGenre,
+      });
+      setTracks(res.data);
+      setTotalPages(res.meta.totalPages);
+      setTotalTracks(res.meta.total);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePlayClick = (track: Track) => {
+    if (track.id === playerTrack?.id) {
+      audioRef.current?.play();
+      setIsPlaying(true);
+      return;
+    }
+    setPlayerTrack(track);
+    setTimeout(() => audioRef.current?.play(), 0);
+    setIsPlaying(true);
+  };
+
+  const handlePauseClick = () => {
+    audioRef.current?.pause();
+    setIsPlaying(false);
+  };
+
+  const handleNext = () => {
+    if (!playerTrack) return;
+    const playable = tracks.filter((t) => t.audioFile);
+    const current = playable.findIndex((t) => t.id === playerTrack.id);
+    if (current !== -1 && current < playable.length - 1) setPlayerTrack(playable[current + 1]);
+  };
+
+  const handlePrev = () => {
+    if (!playerTrack) return;
+    const playable = tracks.filter((t) => t.audioFile);
+    const current = playable.findIndex((t) => t.id === playerTrack.id);
+    if (current > 0) setPlayerTrack(playable[current - 1]);
+  };
+
+  const resetLoadedTracksParams = () => {
+    setSortBy('createdAt');
+    setSortOrder('desc');
+    setSelectedGenre('');
+    setSearchText('');
+    setCurrentPage(1);
+    setSelectedTracksIds([]);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalType('');
+    setEditingTrack(null);
+  };
+
+  const handleEditClick = (track: Track) => {
+    setEditingTrack(track);
+    setModalType('create-or-edit');
+    setShowModal(true);
+  };
+
+  const handleDeleteClick = (track: Track) => {
+    setEditingTrack(track);
+    setModalType('delete');
+    setShowModal(true);
+  };
+
+  const handleUploadFileClick = (track: Track) => {
+    setEditingTrack(track);
+    setModalType('upload-file');
+    setShowModal(true);
+  };
+
+  const handleSuccessCreateOrEdit = async () => {
+    if (!editingTrack) resetLoadedTracksParams();
+    else loadTracks(currentPage);
+
+    setShowModal(false);
+    setModalType('');
+    setEditingTrack(null);
+  };
+
+  useEffect(() => setCurrentPage(1), [itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
+  useEffect(() => {
+    void loadTracks(currentPage);
+  }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
+
+  return {
+    state: {
+      isLoading,
+      tracks,
+      selectedTracksIds,
+      totalTracks,
+      isPlaying,
+      playerTrack,
+      currentPage,
+      totalPages,
+      itemsPerPage,
+      selectedGenre,
+      searchText,
+      sortBy,
+      sortOrder,
+      showModal,
+      modalType,
+      editingTrack,
+      audioRef,
+    },
+    handlers: {
+      setSearchText,
+      setSelectedGenre,
+      setSortBy,
+      setSortOrder,
+      setShowModal,
+      setModalType,
+      setIsPlaying,
+      setItemsPerPage,
+      setCurrentPage,
+      setSelectedTracksIds,
+      handlePlayClick,
+      handlePauseClick,
+      handleNext,
+      handlePrev,
+      handleEditClick,
+      handleDeleteClick,
+      handleUploadFileClick,
+      handleCloseModal,
+      handleSuccessCreateOrEdit,
+    },
+  };
+};
