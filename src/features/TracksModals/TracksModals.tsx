@@ -20,7 +20,6 @@ const TracksModals = ({
   onClose: () => void;
   onSuccess: () => void;
   onUploadFileClick: () => void;
-  reloadTracks: () => void;
 }) => {
   if (!show || !type) return null;
 

@@ -17,14 +17,14 @@ export interface TrackMetadataFormValues {
   coverImageUrl: string;
 }
 
-interface TrackMetadataFormProps {
+interface Props {
   initialValues?: Track;
   trackId?: string;
   onUploadFileClick?: () => void;
-  onSuccess?: () => void;
+  onSuccess: () => void;
 }
 
-const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
+const TrackMetadataForm: React.FC<Props> = ({
   initialValues,
   trackId,
   onUploadFileClick,
@@ -78,7 +78,7 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
       setDeleteError(null);
 
       await deleteTrackFile(trackId);
-      onSuccess?.();
+      onSuccess();
     } catch (err) {
       console.error('Failed to delete audio file', err);
       setDeleteError('Failed to delete audio file.');
@@ -109,8 +109,7 @@ const TrackMetadataForm: React.FC<TrackMetadataFormProps> = ({
           coverImage: formData.coverImageUrl,
         });
       }
-
-      onSuccess?.();
+      onSuccess();
     } catch (err) {
       console.error('Failed to submit track', err);
     }

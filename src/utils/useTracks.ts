@@ -115,8 +115,10 @@ export const useTracks = () => {
   };
 
   const handleSuccessCreateOrEdit = async () => {
-    if (!editingTrack) resetLoadedTracksParams();
-    else loadTracks(currentPage);
+    if (!editingTrack) {
+      resetLoadedTracksParams();
+      loadTracks(1);
+    } else loadTracks(currentPage);
 
     setShowModal(false);
     setModalType('');
