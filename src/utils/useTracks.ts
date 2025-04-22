@@ -5,32 +5,28 @@ import { Order, Sort, Track } from '../api/types';
 
 export const useTracks = () => {
   const [isLoading, setIsLoading] = useState(false);
+
   const [tracks, setTracks] = useState<Track[]>([]);
   const [selectedTracksIds, setSelectedTracksIds] = useState<string[]>([]);
   const [totalTracks, setTotalTracks] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [playerTrack, setPlayerTrack] = useState<Track | null>(null);
-  const [editingTrack, setEditingTrack] = useState<Track | null>(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
   const [selectedGenre, setSelectedGenre] = useState('');
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState(searchText);
   const [sortBy, setSortBy] = useState<Sort>('createdAt');
   const [sortOrder, setSortOrder] = useState<Order>('desc');
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playerTrack, setPlayerTrack] = useState<Track | null>(null);
+
+  const [editingTrack, setEditingTrack] = useState<Track | null>(null);
+
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<'create-or-edit' | 'delete' | 'upload-file' | ''>('');
-  const debouncedSearchText = useMemo(
-    () => debounce((value: string) => setDebouncedSearch(value), 500),
-    []
-  );
-  const [debouncedSearch, setDebouncedSearch] = useState(searchText);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  useEffect(() => {
-    debouncedSearchText(searchText);
-    return () => debouncedSearchText.cancel();
-  }, [searchText]);
 
   const loadTracks = async (page: number) => {
     setIsLoading(true);
@@ -53,6 +49,22 @@ export const useTracks = () => {
     }
   };
 
+  const resetLoadedTracksParams = () => {
+    setSortBy('createdAt');
+    setSortOrder('desc');
+    setSelectedGenre('');
+    setSearchText('');
+    setCurrentPage(1);
+    setSelectedTracksIds([]);
+  };
+
+  const debouncedSearchText = useMemo(
+    () => debounce((value: string) => setDebouncedSearch(value), 500),
+    []
+  );
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+
   const handlePlayClick = (track: Track) => {
     if (track.id === playerTrack?.id) {
       audioRef.current?.play();
@@ -67,27 +79,18 @@ export const useTracks = () => {
     setIsPlaying(false);
   };
 
-  const handleNext = () => {
+  const handlePlayNext = () => {
     if (!playerTrack) return;
     const playable = tracks.filter((t) => t.audioFile);
     const current = playable.findIndex((t) => t.id === playerTrack.id);
     if (current !== -1 && current < playable.length - 1) setPlayerTrack(playable[current + 1]);
   };
 
-  const handlePrev = () => {
+  const handlePlayPrev = () => {
     if (!playerTrack) return;
     const playable = tracks.filter((t) => t.audioFile);
     const current = playable.findIndex((t) => t.id === playerTrack.id);
     if (current > 0) setPlayerTrack(playable[current - 1]);
-  };
-
-  const resetLoadedTracksParams = () => {
-    setSortBy('createdAt');
-    setSortOrder('desc');
-    setSelectedGenre('');
-    setSearchText('');
-    setCurrentPage(1);
-    setSelectedTracksIds([]);
   };
 
   const handleCloseModal = () => {
@@ -126,9 +129,15 @@ export const useTracks = () => {
   };
 
   useEffect(() => setCurrentPage(1), [itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
+
   useEffect(() => {
     void loadTracks(currentPage);
   }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
+
+  useEffect(() => {
+    debouncedSearchText(searchText);
+    return () => debouncedSearchText.cancel();
+  }, [searchText]);
 
   useEffect(() => {
     if (playerTrack && audioRef.current) {
@@ -171,8 +180,8 @@ export const useTracks = () => {
       setSelectedTracksIds,
       handlePlayClick,
       handlePauseClick,
-      handleNext,
-      handlePrev,
+      handleNext: handlePlayNext,
+      handlePrev: handlePlayPrev,
       handleEditClick,
       handleDeleteClick,
       handleUploadFileClick,
