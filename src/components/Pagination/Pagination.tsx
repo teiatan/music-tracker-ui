@@ -3,7 +3,7 @@ import ResponsivePagination from 'react-responsive-pagination';
 import { debounce } from 'lodash';
 import styles from './Pagination.module.scss';
 
-interface PaginationProps {
+interface Props {
   currentPage: number;
   totalPages: number;
   itemsPerPage: number;
@@ -11,7 +11,7 @@ interface PaginationProps {
   onItemsPerPageChange: (value: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination: React.FC<Props> = ({
   currentPage,
   totalPages,
   itemsPerPage,

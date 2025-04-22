@@ -5,14 +5,14 @@ import styles from './Select.module.scss';
 type SelectVariant = 'primary' | 'secondary';
 type SelectSize = 'sm' | 'md' | 'lg';
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
   className?: string;
   variant?: SelectVariant;
   customSize?: SelectSize;
   title?: string;
 }
 
-const Select: React.FC<SelectProps> = ({
+const Select: React.FC<Props> = ({
   className,
   variant = 'primary',
   customSize = 'md',

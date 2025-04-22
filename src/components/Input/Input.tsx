@@ -5,14 +5,14 @@ import styles from './Input.module.scss';
 type InputVariant = 'primary' | 'secondary';
 type InputSize = 'sm' | 'md' | 'lg';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   variant?: InputVariant;
   customSize?: InputSize;
   title?: string;
 }
 
-const Input: React.FC<InputProps> = ({
+const Input: React.FC<Props> = ({
   className,
   variant = 'primary',
   customSize = 'md',

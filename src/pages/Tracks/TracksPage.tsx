@@ -106,7 +106,6 @@ const TracksPage = () => {
         selectedIds={selectedTracksIds}
         onClose={handlers.handleCloseModal}
         onSuccess={handlers.handleSuccessCreateOrEdit}
-        onSuccessUploadFile={handlers.handleSuccessCreateOrEdit}
         onUploadFileClick={() => handlers.setModalType('upload-file')}
       />
     </>

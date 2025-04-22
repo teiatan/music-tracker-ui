@@ -4,7 +4,7 @@ import Select from '../../components/Select/Select';
 import Button from '../../components/Button/Button';
 import styles from './GenreSelect.module.scss';
 
-interface GenreSelectProps {
+interface Props {
   mode?: 'select' | 'button';
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -14,7 +14,7 @@ interface GenreSelectProps {
   title?: string;
 }
 
-const GenreSelect: React.FC<GenreSelectProps> = ({
+const GenreSelect: React.FC<Props> = ({
   mode = 'select',
   value = '',
   onChange,

@@ -2,15 +2,14 @@ import { useEffect } from 'react';
 import styles from './Modal.module.scss';
 import clsx from 'clsx';
 
-interface ModalProps {
+interface Props {
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ onClose, children, className }) => {
+const Modal: React.FC<Props> = ({ onClose, children, className }) => {
   useEffect(() => {
-    // заборона скролу
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
@@ -22,7 +21,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, children, className }) => {
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      // повертаємо скрол
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
       document.removeEventListener('keydown', handleKeyDown);
@@ -37,9 +35,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, children, className }) => {
 
   return (
     <div className={clsx(styles.wrapper, className)} onClick={handleOutsideClick}>
-      {/* <div className={styles.container}> */}
       {children}
-      {/* </div> */}
     </div>
   );
 };
