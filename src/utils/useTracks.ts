@@ -2,8 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { getTracks } from '../api/getTracks.api';
 import { Order, Sort, Track } from '../api/types';
+import { useToast } from '../context/ToastContext';
 
 export const useTracks = () => {
+  const { addToast } = useToast();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -47,6 +50,7 @@ export const useTracks = () => {
       setTotalTracks(res.meta.total);
     } catch (err) {
       console.error(err);
+      addToast('Failed to load tracks', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +138,8 @@ export const useTracks = () => {
     setShowModal(false);
     setModalType('');
     setEditingTrack(null);
+
+    addToast('Track saved successfully', 'success');
   };
 
   useEffect(() => setCurrentPage(1), [itemsPerPage, searchText, selectedGenre, sortBy, sortOrder]);
