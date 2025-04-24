@@ -59,7 +59,6 @@ npm run start
 
 ## Links
 
-- **Frontend Repository**: [https://github.com/your-username/music-tracker-ui](https://github.com/your-username/music-tracker-ui)
-- **Live Frontend**: [https://music-tracker-ui.vercel.app](https://music-tracker-ui.vercel.app)
-- **Backend Repository**: [https://github.com/your-username/music-tracker-api](https://github.com/your-username/music-tracker-api)
-- **Live Backend API**: [http://localhost:8000](http://localhost:8000)
+- **Repository**: [https://github.com/teiatan/music-tracker-ui](https://github.com/teiatan/music-tracker-ui)
+- **Live**: [https://music-tracker-ui.vercel.app/](https://music-tracker-ui.vercel.app)
+
