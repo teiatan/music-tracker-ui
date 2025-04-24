@@ -9,6 +9,8 @@ import { updateTrack } from '../../api/updateTrack';
 import { deleteTrackFile } from '../../api/deleteTrackFile.api';
 import { Track } from '../../api/types';
 import { validateImageUrl } from '../../utils/validateImageUrl';
+import { useToast } from '../../context/ToastContext';
+import axios from 'axios';
 
 interface TrackMetadataFormValues {
   title: string;
@@ -31,6 +33,8 @@ const TrackMetadataForm: React.FC<Props> = ({
   onUploadFileClick,
   onSuccess,
 }) => {
+  const { addToast } = useToast();
+
   const [formData, setFormData] = useState<TrackMetadataFormValues>({
     title: initialValues?.title ?? '',
     artist: initialValues?.artist ?? '',
@@ -119,6 +123,16 @@ const TrackMetadataForm: React.FC<Props> = ({
       onSuccess();
     } catch (err) {
       console.error('Failed to submit track', err);
+
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 409 && err.response.data?.error) {
+          addToast(err.response.data.error, 'error');
+        } else {
+          addToast('Something went wrong. Please try again.', 'error');
+        }
+      } else {
+        addToast('Unexpected error occurred.', 'error');
+      }
     }
   };
 
