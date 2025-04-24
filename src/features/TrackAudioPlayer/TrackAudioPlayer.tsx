@@ -119,9 +119,15 @@ const TrackAudioPlayer = ({ track, onNext, onPrev, handlePlaying, audioRef }: Pr
         <canvas ref={canvasRef} width={500} height={60} className={styles.waveform} />
 
         <div className={styles.controls}>
-          <button className={styles.navButton} onClick={onPrev} aria-label="Previous track">
+          <button
+            className={styles.navButton}
+            onClick={onPrev}
+            aria-label="Previous track"
+            data-testid={`pause-button-${track.id}`}
+          >
             ◀
           </button>
+
           <audio
             ref={audioRef}
             controls
@@ -132,9 +138,19 @@ const TrackAudioPlayer = ({ track, onNext, onPrev, handlePlaying, audioRef }: Pr
             crossOrigin="anonymous"
             src={`${API_BASE_URL}api/files/${track.audioFile}`}
           />
-          <button className={styles.navButton} onClick={onNext} aria-label="Next track">
+
+          <button
+            className={styles.navButton}
+            onClick={onNext}
+            aria-label="Next track"
+            data-testid={`play-button-${track.id}`}
+          >
             ▶
           </button>
+        </div>
+
+        <div className={styles.progress} data-testid={`audio-progress-${track.id}`}>
+          <canvas ref={canvasRef} width={500} height={60} className={styles.waveform} />
         </div>
       </div>
     </div>
