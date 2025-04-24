@@ -14,7 +14,7 @@ export interface TrackMetadataFormValues {
   artist: string;
   album: string;
   genres: string[];
-  coverImageUrl: string;
+  coverImage: string;
 }
 
 interface Props {
@@ -35,7 +35,7 @@ const TrackMetadataForm: React.FC<Props> = ({
     artist: '',
     album: '',
     genres: [],
-    coverImageUrl: '',
+    coverImage: '',
     ...initialValues,
   });
 
@@ -48,11 +48,8 @@ const TrackMetadataForm: React.FC<Props> = ({
     if (!formData.title.trim()) errs.title = 'Title is required';
     if (!formData.artist.trim()) errs.artist = 'Artist is required';
 
-    if (
-      formData.coverImageUrl &&
-      !/^https?:\/\/.+\.(jpg|jpeg|png|webp)$/i.test(formData.coverImageUrl)
-    ) {
-      errs.coverImageUrl = 'Invalid image URL';
+    if (formData.coverImage && !/^https?:\/\/.+\.(jpg|jpeg|png|webp)$/i.test(formData.coverImage)) {
+      errs.coverImage = 'Invalid image URL';
     }
 
     setErrors(errs);
@@ -98,7 +95,7 @@ const TrackMetadataForm: React.FC<Props> = ({
           artist: formData.artist,
           album: formData.album,
           genres: formData.genres,
-          coverImage: formData.coverImageUrl,
+          coverImage: formData.coverImage,
         });
       } else {
         await createTrack({
@@ -106,7 +103,7 @@ const TrackMetadataForm: React.FC<Props> = ({
           artist: formData.artist,
           album: formData.album,
           genres: formData.genres,
-          coverImage: formData.coverImageUrl,
+          coverImage: formData.coverImage,
         });
       }
       onSuccess();
@@ -174,13 +171,24 @@ const TrackMetadataForm: React.FC<Props> = ({
 
       <Input
         title="Cover Image URL"
-        value={formData.coverImageUrl}
-        onChange={(e) => handleChange('coverImageUrl', e.target.value)}
+        value={formData.coverImage}
+        onChange={(e) => handleChange('coverImage', e.target.value)}
         data-testid="input-cover-image"
       />
-      {errors.coverImageUrl && (
-        <div className={styles.error} data-testid="error-coverImageUrl">
-          {errors.coverImageUrl}
+      {errors.coverImage && (
+        <div className={styles.error} data-testid="error-coverImage">
+          {errors.coverImage}
+        </div>
+      )}
+
+      {formData.coverImage && !errors.coverImage && (
+        <div className={styles.coverPreview}>
+          <img
+            src={formData.coverImage}
+            alt="Cover Preview"
+            className={styles.coverImage}
+            onError={(e) => (e.currentTarget.style.display = 'none')}
+          />
         </div>
       )}
 
