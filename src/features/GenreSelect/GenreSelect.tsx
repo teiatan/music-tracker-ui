@@ -82,7 +82,7 @@ const GenreSelect: React.FC<Props> = ({
   return (
     <Select
       title={title}
-      data-testid="genre-select"
+      data-testid="filter-genre"
       value={value}
       onChange={onChange}
       className={className}

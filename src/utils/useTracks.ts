@@ -17,6 +17,8 @@ export const useTracks = () => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [searchText, setSearchText] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(searchText);
+  const [artistFilter, setArtistFilter] = useState('');
+  const [debouncedArtist, setDebouncedArtist] = useState(artistFilter);
   const [sortBy, setSortBy] = useState<Sort>('createdAt');
   const [sortOrder, setSortOrder] = useState<Order>('desc');
 
@@ -38,6 +40,7 @@ export const useTracks = () => {
         order: sortOrder,
         search: debouncedSearch,
         genre: selectedGenre,
+        artist: debouncedArtist,
       });
       setTracks(res.data);
       setTotalPages(res.meta.totalPages);
@@ -60,6 +63,11 @@ export const useTracks = () => {
 
   const debouncedSearchText = useMemo(
     () => debounce((value: string) => setDebouncedSearch(value), 500),
+    []
+  );
+
+  const debouncedArtistText = useMemo(
+    () => debounce((value: string) => setDebouncedArtist(value), 500),
     []
   );
 
@@ -132,12 +140,25 @@ export const useTracks = () => {
 
   useEffect(() => {
     void loadTracks(currentPage);
-  }, [currentPage, itemsPerPage, debouncedSearch, selectedGenre, sortBy, sortOrder]);
+  }, [
+    currentPage,
+    itemsPerPage,
+    debouncedSearch,
+    debouncedArtist,
+    selectedGenre,
+    sortBy,
+    sortOrder,
+  ]);
 
   useEffect(() => {
     debouncedSearchText(searchText);
     return () => debouncedSearchText.cancel();
   }, [searchText]);
+
+  useEffect(() => {
+    debouncedArtistText(artistFilter);
+    return () => debouncedArtistText.cancel();
+  }, [artistFilter]);
 
   useEffect(() => {
     if (playerTrack && audioRef.current) {
@@ -160,6 +181,7 @@ export const useTracks = () => {
       itemsPerPage,
       selectedGenre,
       searchText,
+      artistFilter,
       sortBy,
       sortOrder,
       showModal,
@@ -169,6 +191,7 @@ export const useTracks = () => {
     },
     handlers: {
       setSearchText,
+      setArtistFilter,
       setSelectedGenre,
       setSortBy,
       setSortOrder,

@@ -23,6 +23,7 @@ const TracksPage = () => {
       itemsPerPage,
       selectedGenre,
       searchText,
+      artistFilter,
       sortBy,
       sortOrder,
       showModal,
@@ -55,11 +56,13 @@ const TracksPage = () => {
 
         <TracksControls
           searchText={searchText}
+          artistFilter={artistFilter}
           selectedGenre={selectedGenre}
           sortBy={sortBy}
           sortOrder={sortOrder}
           selectedTracksIds={selectedTracksIds}
           setSearchText={handlers.setSearchText}
+          setArtistFilter={handlers.setArtistFilter}
           setSelectedGenre={handlers.setSelectedGenre}
           setSortBy={handlers.setSortBy}
           setSortOrder={handlers.setSortOrder}
