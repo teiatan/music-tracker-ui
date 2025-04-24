@@ -3,6 +3,7 @@ import { getGenres } from '../../api/getGenres.api';
 import Select from '../../components/Select/Select';
 import Button from '../../components/Button/Button';
 import styles from './GenreSelect.module.scss';
+import { useToast } from '../../context/ToastContext';
 
 interface Props {
   mode?: 'select' | 'button';
@@ -23,6 +24,7 @@ const GenreSelect: React.FC<Props> = ({
   excludeGenres = [],
   title = 'Genre',
 }) => {
+  const { addToast } = useToast();
   const [genres, setGenres] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -35,6 +37,7 @@ const GenreSelect: React.FC<Props> = ({
         setGenres(result);
       } catch (error) {
         console.error('Error fetching genres:', error);
+        addToast('Failed to load genres', 'error');
       } finally {
         setIsLoading(false);
       }

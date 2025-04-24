@@ -92,6 +92,7 @@ const TrackMetadataForm: React.FC<Props> = ({
     } catch (err) {
       console.error('Failed to delete audio file', err);
       setDeleteError('Failed to delete audio file.');
+      addToast('Failed to delete audio file', 'error');
     } finally {
       setIsDeleting(false);
     }
@@ -123,6 +124,7 @@ const TrackMetadataForm: React.FC<Props> = ({
       onSuccess();
     } catch (err) {
       console.error('Failed to submit track', err);
+      addToast('Failed to submit track', 'error');
 
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 409 && err.response.data?.error) {
