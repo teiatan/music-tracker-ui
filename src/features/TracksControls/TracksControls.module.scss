@@ -3,4 +3,14 @@
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 16px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    // Якщо потрібно, щоб інпути займали всю ширину
+    > * {
+      width: 100%;
+    }
+  }
 }

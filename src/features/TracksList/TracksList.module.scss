@@ -159,3 +159,52 @@
   font-size: 14px;
   color: #333;
 }
+
+
+@media (max-width: 768px) {
+  .track {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .trackInfo {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .trackDetails {
+    margin-top: 8px;
+  }
+
+  .trackActions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .actionButton {
+    flex-grow: 1;
+    margin-top: 6px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .coverImage {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+  }
+
+  .playButton {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+
+  .topControls,
+  .selectAll {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

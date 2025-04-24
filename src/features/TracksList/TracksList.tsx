@@ -56,21 +56,23 @@ const TracksList = ({
 
   return (
     <>
-      <div className={styles.topControls}>
-        <label className={styles.toggleWrapper}>
-          <input
-            type="checkbox"
-            checked={selectionMode}
-            onChange={toggleSelectionMode}
-            className={styles.toggleCheckbox}
-            data-testid="select-mode-toggle"
-          />
-          <span className={styles.toggleSlider} />
-          <span className={styles.toggleLabel}>
-            {selectionMode ? 'Selection mode ON' : 'Selection mode OFF'}
-          </span>
-        </label>
-      </div>
+      {tracks.length > 1 && (
+        <div className={styles.topControls}>
+          <label className={styles.toggleWrapper}>
+            <input
+              type="checkbox"
+              checked={selectionMode}
+              onChange={toggleSelectionMode}
+              className={styles.toggleCheckbox}
+              data-testid="select-mode-toggle"
+            />
+            <span className={styles.toggleSlider} />
+            <span className={styles.toggleLabel}>
+              {selectionMode ? 'Selection mode ON' : 'Selection mode OFF'}
+            </span>
+          </label>
+        </div>
+      )}
       {selectionMode && tracks.length > 1 && (
         <div className={styles.selectAll}>
           <input

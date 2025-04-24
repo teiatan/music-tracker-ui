@@ -4,6 +4,7 @@ import GenreSelect from '../../features/GenreSelect/GenreSelect';
 import Button from '../../components/Button/Button';
 import { Order, Sort } from '../../api/types';
 import styles from '../../pages/Tracks/TracksPage.module.scss';
+import styless from './TracksControls.module.scss';
 
 const TracksControls = ({
   searchText,
@@ -32,7 +33,7 @@ const TracksControls = ({
   setSortOrder: (value: Order) => void;
   onBulkDelete: () => void;
 }) => (
-  <div className={styles.controls}>
+  <div className={styless.controls}>
     <Input
       title="Search"
       value={searchText}

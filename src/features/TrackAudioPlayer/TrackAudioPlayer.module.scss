@@ -79,3 +79,67 @@
     }
   }
 }
+
+@media (max-width: 600px) {
+  .player {
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .coverWrapper {
+    flex-shrink: 0;
+  }
+
+  .cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+  }
+
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+  }
+
+  .title {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .artist {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .genres {
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+
+    .genre {
+      font-size: 0.7rem;
+      padding: 1px 6px;
+    }
+  }
+
+  .controls {
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 6px;
+
+    .navButton {
+      width: 26px;
+      height: 26px;
+      font-size: 14px;
+    }
+  }
+
+  .waveform {
+    height: 2px;
+  }
+}
