@@ -42,6 +42,11 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
       setIsProcessing(true);
       setError(null);
 
+      if (track?.audioFile) {
+        await deleteTrackFile(track.id);
+        addToast('Previous file deleted successfully.', 'info');
+      }
+
       await uploadTrackFile(track!.id, file);
       addToast('File uploaded successfully!', 'success');
       onUploaded();
