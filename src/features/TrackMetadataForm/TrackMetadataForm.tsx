@@ -185,11 +185,10 @@ const TrackMetadataForm: React.FC<Props> = ({
             </span>
           ))}
         </div>
-        {errors.genres && (
-          <div className={styles.error} data-testid="error-genre">
-            {errors.genres}
-          </div>
-        )}
+
+        <div className={styles.error} data-testid="error-genre">
+          {errors.genres}
+        </div>
       </div>
 
       <Input
