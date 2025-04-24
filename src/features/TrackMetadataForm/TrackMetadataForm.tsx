@@ -56,9 +56,12 @@ const TrackMetadataForm: React.FC<Props> = ({
     if (!formData.title.trim()) errs.title = 'Title is required';
     if (!formData.artist.trim()) errs.artist = 'Artist is required';
 
+    if (formData.genres.length === 0) {
+      errs.genres = 'At least one genre must be selected';
+    }
+
     if (formData.coverImage) {
       const isFormatValid = /\.(jpg|jpeg|png|webp)(\?.*)?$/i.test(formData.coverImage);
-      // const isFormatValid = /^https?:\/\/[^\\s]+?\.(jpg|jpeg|png|webp)$/i.test(formData.coverImage);
       const isLoadable = await validateImageUrl(formData.coverImage);
 
       if (!isFormatValid || !isLoadable) {
@@ -182,6 +185,11 @@ const TrackMetadataForm: React.FC<Props> = ({
             </span>
           ))}
         </div>
+        {errors.genres && (
+          <div className={styles.error} data-testid="error-genre">
+            {errors.genres}
+          </div>
+        )}
       </div>
 
       <Input

@@ -64,13 +64,13 @@ const TracksList = ({
             ) : (
               <button
                 className={styles.playButton}
-                data-testid={`play-button-${track.id}`}
+                data-testid={`${track.audioFile ? 'play' : 'upload'}-track-${track.id}`}
                 onClick={() =>
                   track.audioFile ? handlePlayClick(track) : handleUploadClick(track)
                 }
                 aria-label="Play"
               >
-                {track.audioFile ? '▶' : '⬆'}
+                {track.audioFile ? '▶' : '⬇'}
               </button>
             )}
             <img

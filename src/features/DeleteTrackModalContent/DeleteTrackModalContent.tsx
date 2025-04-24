@@ -32,8 +32,9 @@ const DeleteTrackModalContent: React.FC<Props> = ({ trackIds, trackTitle, onClos
       setIsDeleting(false);
     }
   };
+
   return (
-    <div className={styles.modal}>
+    <div className={styles.modal} data-testid="confirm-dialog">
       <p>
         {isSingleDeleting && trackTitle ? (
           <>
