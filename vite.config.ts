@@ -9,6 +9,17 @@ export default defineConfig(({ mode }) => {
     server: {
       port: Number(env.VITE_PORT) || 3000,
     },
+    resolve: {
+      // потрібен для коректної роботи з React Router (або іншим SPA роутером)
+      alias: {
+        '@': '/src',
+      },
+    },
+    build: {
+      rollupOptions: {
+        input: '/index.html',
+      },
+    },
     css: {
       preprocessorOptions: {
         scss: {
