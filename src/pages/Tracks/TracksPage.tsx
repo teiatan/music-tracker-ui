@@ -3,7 +3,7 @@ import styles from './TracksPage.module.scss';
 import TracksList from '../../features/TracksList/TracksList';
 import Pagination from '../../components/Pagination/Pagination';
 import TrackAudioPlayer from '../../features/TrackAudioPlayer/TrackAudioPlayer';
-import { useTracks } from '../../utils/useTracks';
+import { useTracks } from '../../hooks/useTracks';
 import TracksHeader from '../../features/TracksHeader/TracksHeader';
 import TracksControls from '../../features/TracksControls/TracksControls';
 import TracksModals from '../../features/TracksModals/TracksModals';

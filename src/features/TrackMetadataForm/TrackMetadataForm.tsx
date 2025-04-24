@@ -8,8 +8,9 @@ import { createTrack } from '../../api/createTrack.api';
 import { updateTrack } from '../../api/updateTrack';
 import { deleteTrackFile } from '../../api/deleteTrackFile.api';
 import { Track } from '../../api/types';
+import { validateImageUrl } from '../../utils/validateImageUrl';
 
-export interface TrackMetadataFormValues {
+interface TrackMetadataFormValues {
   title: string;
   artist: string;
   album: string;
@@ -23,15 +24,6 @@ interface Props {
   onUploadFileClick?: () => void;
   onSuccess: () => void;
 }
-
-const validateImageUrl = (url: string): Promise<boolean> => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.src = url;
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-  });
-};
 
 const TrackMetadataForm: React.FC<Props> = ({
   initialValues,

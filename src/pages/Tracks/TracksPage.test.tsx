@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import TracksPage from './TracksPage';
 import '@testing-library/jest-dom';
 
-jest.mock('../../utils/useTracks');
-import { useTracks } from '../../utils/useTracks';
+jest.mock('../../hooks/useTracks');
+import { useTracks } from '../../hooks/useTracks';
 
 jest.mock('../../config', () => ({
   API_BASE_URL: 'http://localhost/',

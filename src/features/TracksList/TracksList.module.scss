@@ -1,162 +1,161 @@
 .trackList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .track {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .trackInfo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .playButton {
-    width: 33px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    margin-right: 12px;
-    text-align: center;
-    cursor: pointer;
-  }
-  
-  .playPlaceholder {
-    width: 20px;
-    height: 20px;
-    margin-right: 12px;
-  }
-  
-  .trackDetails {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .trackTitle {
-    font-weight: bold;
-  }
-  
-  .trackArtist {
-    font-size: 0.9em;
-    color: #666;
-  }
-  
-  .trackActions {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .actionButton {
-    padding: 6px 12px;
-    border: none;
-    background-color: #3b82f6;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .actionButton:hover {
-    background-color: #1565c0;
-  }
-  
-  .coverImage {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-right: 12px;
-    background-color: #3B82F6;
-  }
-  
-  .trackAlbum {
-    font-size: 0.85em;
-    color: #888;
-    margin-top: 2px;
-  }
-  
-  .uploadButton {
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 10px;
-    cursor: pointer;
-    margin-right: 12px;
-    font-size: 0.85em;
-  }
-  
-  .uploadButton:hover {
-    background-color: #d0d0d0;
-  }
-  
-  .checkbox {
-    margin-right: 12px;
-    transform: scale(1.2);
-    cursor: pointer;
-  }
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .topControls {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+.track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.trackInfo {
+  display: flex;
+  align-items: center;
+}
+
+.playButton {
+  width: 33px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-right: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.playPlaceholder {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
+
+.trackDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.trackTitle {
+  font-weight: bold;
+}
+
+.trackArtist {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.trackActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButton {
+  padding: 6px 12px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actionButton:hover {
+  background-color: #1565c0;
+}
+
+.coverImage {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 12px;
+  background-color: #3b82f6;
+}
+
+.trackAlbum {
+  font-size: 0.85em;
+  color: #888;
+  margin-top: 2px;
+}
+
+.uploadButton {
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  margin-right: 12px;
+  font-size: 0.85em;
+}
+
+.uploadButton:hover {
+  background-color: #d0d0d0;
+}
+
+.checkbox {
+  margin-right: 12px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.topControls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.toggleSelectMode {
+  background-color: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggleCheckbox {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 999px;
+  position: relative;
+  transition: background-color 0.3s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
   }
-  
-  .toggleSelectMode {
-    background-color: #e2e8f0;
-    border: 1px solid #cbd5e1;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-  }  
-  
-  .toggleWrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-  }
-  
-  .toggleCheckbox {
-    display: none;
-  }
-  
-  .toggleSlider {
-    width: 40px;
-    height: 20px;
-    background-color: #ccc;
-    border-radius: 999px;
-    position: relative;
-    transition: background-color 0.3s;
-  
-    &::before {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 16px;
-      height: 16px;
-      background-color: white;
-      border-radius: 50%;
-      transition: transform 0.3s;
-    }
-  }
-  
-  .toggleCheckbox:checked + .toggleSlider {
-    background-color: #3b82f6;
-  }
-  
-  .toggleCheckbox:checked + .toggleSlider::before {
-    transform: translateX(20px);
-  }
-  
-  .toggleLabel {
-    font-size: 14px;
-    color: #333;
-  }
-  
+}
+
+.toggleCheckbox:checked + .toggleSlider {
+  background-color: #3b82f6;
+}
+
+.toggleCheckbox:checked + .toggleSlider::before {
+  transform: translateX(20px);
+}
+
+.toggleLabel {
+  font-size: 14px;
+  color: #333;
+}
