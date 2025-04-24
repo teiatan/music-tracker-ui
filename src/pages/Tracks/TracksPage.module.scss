@@ -1,62 +1,61 @@
 .page {
-    padding: 2rem;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .controls {
-    margin: 1rem 0;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .input,
-  .select {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  
-  .track {
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .searchInput {
-    box-sizing: border-box;
-    min-width: 200px;
-  }
-  
-  .select {
-    display: inline-block;
-  }
+  padding: 2rem;
+}
 
-  .genreSelect {
-    @extend .select;
-    min-width: 150px;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .sortBySelect {
-    @extend .select;
-    min-width: 120px;
-  }
+.controls {
+  margin: 1rem 0;
+  display: flex;
+  gap: 1rem;
+}
 
-  .orderSelect {
-    @extend .select;
-    min-width: 100px;
-  }
+.input,
+.select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.track {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.searchInput {
+  box-sizing: border-box;
+  min-width: 200px;
+}
+
+.select {
+  display: inline-block;
+}
+
+.genreSelect {
+  @extend .select;
+  min-width: 150px;
+}
+
+.sortBySelect {
+  @extend .select;
+  min-width: 120px;
+}
+
+.orderSelect {
+  @extend .select;
+  min-width: 100px;
+}

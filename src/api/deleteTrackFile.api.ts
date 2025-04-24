@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { Track } from './types';
+import { API_BASE_URL } from '../config';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: API_BASE_URL,
 });
 
 export const deleteTrackFile = async (id: string): Promise<Track> => {
