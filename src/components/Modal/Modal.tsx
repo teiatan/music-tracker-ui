@@ -34,7 +34,7 @@ const Modal: React.FC<Props> = ({ onClose, children, className }) => {
   };
 
   return (
-    <div className={clsx(styles.wrapper, className)} onClick={handleOutsideClick}>
+    <div className={clsx(styles.wrapper, className)} onMouseDown={handleOutsideClick}>
       {children}
     </div>
   );
