@@ -13,13 +13,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.7.0",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0",
     "react-responsive-pagination": "^2.10.5",
     "react-router-dom": "^7.5.1"
   },
