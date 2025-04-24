@@ -99,4 +99,64 @@
     transform: scale(1.2);
     cursor: pointer;
   }
+
+  .topControls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  
+  .toggleSelectMode {
+    background-color: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }  
+  
+  .toggleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  
+  .toggleCheckbox {
+    display: none;
+  }
+  
+  .toggleSlider {
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 999px;
+    position: relative;
+    transition: background-color 0.3s;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+  }
+  
+  .toggleCheckbox:checked + .toggleSlider {
+    background-color: #3b82f6;
+  }
+  
+  .toggleCheckbox:checked + .toggleSlider::before {
+    transform: translateX(20px);
+  }
+  
+  .toggleLabel {
+    font-size: 14px;
+    color: #333;
+  }
   

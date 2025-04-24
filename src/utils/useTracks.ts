@@ -10,6 +10,7 @@ export const useTracks = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [selectionMode, setSelectionMode] = useState(true);
   const [selectedTracksIds, setSelectedTracksIds] = useState<string[]>([]);
   const [totalTracks, setTotalTracks] = useState(0);
 
@@ -178,6 +179,7 @@ export const useTracks = () => {
     state: {
       isLoading,
       tracks,
+      selectionMode,
       selectedTracksIds,
       totalTracks,
       isPlaying,
@@ -206,6 +208,7 @@ export const useTracks = () => {
       setIsPlaying,
       setItemsPerPage,
       setCurrentPage,
+      setSelectionMode,
       setSelectedTracksIds,
       handlePlayClick,
       handlePauseClick,

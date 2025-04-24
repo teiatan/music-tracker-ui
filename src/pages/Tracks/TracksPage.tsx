@@ -14,6 +14,7 @@ const TracksPage = () => {
     state: {
       isLoading,
       tracks,
+      selectionMode,
       selectedTracksIds,
       totalTracks,
       isPlaying,
@@ -79,6 +80,8 @@ const TracksPage = () => {
             <p>Tracks found {totalTracks}</p>
             <TracksList
               tracks={tracks}
+              selectionMode={selectionMode}
+              toggleSelectionMode={() => handlers.setSelectionMode(!selectionMode)}
               playerTrack={playerTrack}
               isPlaying={isPlaying}
               selectedTracksIds={selectedTracksIds}

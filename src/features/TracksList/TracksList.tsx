@@ -4,6 +4,8 @@ import styles from './TracksList.module.scss';
 
 interface Props {
   tracks: Track[];
+  selectionMode: boolean;
+  toggleSelectionMode: () => void;
   playerTrack: Track | null;
   isPlaying: boolean;
   selectedTracksIds: string[];
@@ -17,6 +19,8 @@ interface Props {
 
 const TracksList = ({
   tracks,
+  selectionMode,
+  toggleSelectionMode,
   playerTrack,
   isPlaying,
   selectedTracksIds,
@@ -27,6 +31,16 @@ const TracksList = ({
   handleUploadClick,
   handleSelectionChange,
 }: Props) => {
+  const allSelected = tracks.length > 0 && selectedTracksIds.length === tracks.length;
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      handleSelectionChange([]);
+    } else {
+      handleSelectionChange(tracks.map((track) => track.id));
+    }
+  };
+
   const handleCheckboxChange = (id: string) => {
     const isSelected = selectedTracksIds.includes(id);
     const updatedSelected = isSelected
@@ -41,79 +55,111 @@ const TracksList = ({
   };
 
   return (
-    <ul className={styles.trackList}>
-      {tracks.map((track: Track) => (
-        <li key={track.id} data-testid={`track-item-${track.id}`} className={styles.track}>
-          <div className={styles.trackInfo}>
-            <input
-              type="checkbox"
-              checked={selectedTracksIds.includes(track.id)}
-              onChange={() => handleCheckboxChange(track.id)}
-              className={styles.checkbox}
-              aria-label="Select track"
-            />
-            {playerTrack?.id === track.id && isPlaying ? (
-              <button
-                className={styles.playButton}
-                data-testid={`pause-button-${track.id}`}
-                onClick={handlePauseClick}
-                aria-label="Pause"
-              >
-                ⏸
-              </button>
-            ) : (
-              <button
-                className={styles.playButton}
-                data-testid={`${track.audioFile ? 'play' : 'upload'}-track-${track.id}`}
-                onClick={() =>
-                  track.audioFile ? handlePlayClick(track) : handleUploadClick(track)
-                }
-                aria-label="Play"
-              >
-                {track.audioFile ? '▶' : '⬇'}
-              </button>
-            )}
-            <img
-              src={track.coverImage || '/headphones.svg'}
-              alt="Cover"
-              className={styles.coverImage}
-              onError={handleImageError}
-            />
+    <>
+      <div className={styles.topControls}>
+        <label className={styles.toggleWrapper}>
+          <input
+            type="checkbox"
+            checked={selectionMode}
+            onChange={toggleSelectionMode}
+            className={styles.toggleCheckbox}
+            data-testid="select-mode-toggle"
+          />
+          <span className={styles.toggleSlider} />
+          <span className={styles.toggleLabel}>
+            {selectionMode ? 'Selection mode ON' : 'Selection mode OFF'}
+          </span>
+        </label>
+      </div>
+      {selectionMode && tracks.length > 1 && (
+        <div className={styles.selectAll}>
+          <input
+            type="checkbox"
+            checked={allSelected}
+            onChange={toggleSelectAll}
+            data-testid="select-all"
+          />
+          <label>Select all</label>
+        </div>
+      )}
 
-            <div className={styles.trackDetails}>
-              <div data-testid={`track-item-${track.id}-title`} className={styles.trackTitle}>
-                {track.title}
-              </div>
-              <div data-testid={`track-item-${track.id}-artist`} className={styles.trackArtist}>
-                {track.artist}
-              </div>
-              {track.album && (
-                <div className={styles.trackAlbum}>
-                  <em>{track.album}</em>
-                </div>
+      <ul className={styles.trackList}>
+        {tracks.map((track: Track) => (
+          <li key={track.id} data-testid={`track-item-${track.id}`} className={styles.track}>
+            <div className={styles.trackInfo}>
+              {selectionMode && tracks.length > 1 && (
+                <input
+                  type="checkbox"
+                  checked={selectedTracksIds.includes(track.id)}
+                  onChange={() => handleCheckboxChange(track.id)}
+                  className={styles.checkbox}
+                  aria-label="Select track"
+                  data-testid={`track-checkbox-${track.id}`}
+                />
               )}
-            </div>
-          </div>
+              {playerTrack?.id === track.id && isPlaying ? (
+                <button
+                  className={styles.playButton}
+                  data-testid={`pause-button-${track.id}`}
+                  onClick={handlePauseClick}
+                  aria-label="Pause"
+                >
+                  ⏸
+                </button>
+              ) : (
+                <button
+                  className={styles.playButton}
+                  data-testid={`${track.audioFile ? 'play' : 'upload'}-track-${track.id}`}
+                  onClick={() =>
+                    track.audioFile ? handlePlayClick(track) : handleUploadClick(track)
+                  }
+                  aria-label="Play"
+                >
+                  {track.audioFile ? '▶' : '⬇'}
+                </button>
+              )}
+              <img
+                src={track.coverImage || '/headphones.svg'}
+                alt="Cover"
+                className={styles.coverImage}
+                onError={handleImageError}
+              />
 
-          <div className={styles.trackActions}>
-            <button
-              data-testid={`edit-track-${track.id}`}
-              onClick={() => handleEditClick(track)}
-              className={styles.actionButton}
-            >
-              Edit
-            </button>
-            <button
-              data-testid={`delete-track-${track.id}`}
-              onClick={() => handleDeleteClick(track)}
-              className={styles.actionButton}
-            >
-              Delete
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+              <div className={styles.trackDetails}>
+                <div data-testid={`track-item-${track.id}-title`} className={styles.trackTitle}>
+                  {track.title}
+                </div>
+                <div data-testid={`track-item-${track.id}-artist`} className={styles.trackArtist}>
+                  {track.artist}
+                </div>
+                {track.album && (
+                  <div className={styles.trackAlbum}>
+                    <em>{track.album}</em>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.trackActions}>
+              <button
+                data-testid={`edit-track-${track.id}`}
+                onClick={() => handleEditClick(track)}
+                className={styles.actionButton}
+              >
+                Edit
+              </button>
+              <button
+                data-testid={`delete-track-${track.id}`}
+                onClick={() => handleDeleteClick(track)}
+                className={styles.actionButton}
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
 

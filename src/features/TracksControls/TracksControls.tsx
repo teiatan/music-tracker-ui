@@ -74,7 +74,7 @@ const TracksControls = ({
       <option value="desc">Descending</option>
     </Select>
     {selectedTracksIds.length > 0 && (
-      <Button variant="danger" onClick={onBulkDelete}>
+      <Button variant="danger" onClick={onBulkDelete} data-testid="bulk-delete-button">
         delete selected tracks ({selectedTracksIds.length})
       </Button>
     )}
