@@ -36,9 +36,9 @@ const TracksPage = () => {
   } = useTracks();
 
   return (
-    <>
-      <div className={styles.page}>
-        {playerTrack && (
+    <div className={`${styles.pageWrapper} ${playerTrack ? styles.withPlayer : ''}`}>
+      {playerTrack && (
+        <div className={styles.playerWrapper}>
           <TrackAudioPlayer
             track={playerTrack}
             onNext={handlers.handleNext}
@@ -46,8 +46,10 @@ const TracksPage = () => {
             handlePlaying={(p) => handlers.setIsPlaying?.(p)}
             audioRef={audioRef}
           />
-        )}
+        </div>
+      )}
 
+      <div className={styles.page}>
         <TracksHeader
           onCreate={() => {
             handlers.setShowModal(true);
@@ -115,7 +117,7 @@ const TracksPage = () => {
         onSuccess={handlers.handleSuccessCreateOrEdit}
         onUploadFileClick={() => handlers.setModalType('upload-file')}
       />
-    </>
+    </div>
   );
 };
 
