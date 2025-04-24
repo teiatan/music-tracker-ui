@@ -7,6 +7,7 @@ import { useTracks } from '../../utils/useTracks';
 import TracksHeader from '../../features/TracksHeader/TracksHeader';
 import TracksControls from '../../features/TracksControls/TracksControls';
 import TracksModals from '../../features/TracksModals/TracksModals';
+import Loader from '../../components/Loader/Loader';
 
 const TracksPage = () => {
   const {
@@ -69,7 +70,7 @@ const TracksPage = () => {
         />
 
         {isLoading ? (
-          <div data-testid="loading-tracks">Loading...</div>
+          <Loader />
         ) : (
           <>
             <p>Tracks found {totalTracks}</p>
