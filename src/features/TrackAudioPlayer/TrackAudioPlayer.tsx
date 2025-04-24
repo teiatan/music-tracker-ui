@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import styles from './TrackAudioPlayer.module.scss';
 import { Track } from '../../api/types';
-import { API_BASE_URL } from '../../config';
 
 interface Props {
   track: Track;
@@ -136,7 +135,7 @@ const TrackAudioPlayer = ({ track, onNext, onPrev, handlePlaying, audioRef }: Pr
             onPause={() => handlePlaying?.(false)}
             onPlay={() => handlePlaying?.(true)}
             crossOrigin="anonymous"
-            src={`${API_BASE_URL}api/files/${track.audioFile}`}
+            src={`${track.audioFile}`}
           />
 
           <button

@@ -48,7 +48,7 @@ describe('DeleteTrackModalContent', () => {
 
     expect(
       screen.getByText(
-        (content, node) => node?.textContent === 'Are you sure you want to delete 2 tracks?'
+        (_content, node) => node?.textContent === 'Are you sure you want to delete 2 tracks?'
       )
     ).toBeInTheDocument();
   });

@@ -3,7 +3,6 @@ import UploadTrackModalContent from './UploadTrackModalContent';
 import { uploadTrackFile } from '../../api/uploadTrackFile.api';
 import { deleteTrackFile } from '../../api/deleteTrackFile.api';
 import { Track } from '../../api/types';
-import React from 'react';
 
 jest.mock('../../api/uploadTrackFile.api', () => ({
   uploadTrackFile: jest.fn().mockResolvedValue({}),
