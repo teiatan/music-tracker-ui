@@ -24,6 +24,15 @@ interface Props {
   onSuccess: () => void;
 }
 
+const validateImageUrl = (url: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+  });
+};
+
 const TrackMetadataForm: React.FC<Props> = ({
   initialValues,
   trackId,
@@ -31,25 +40,29 @@ const TrackMetadataForm: React.FC<Props> = ({
   onSuccess,
 }) => {
   const [formData, setFormData] = useState<TrackMetadataFormValues>({
-    title: '',
-    artist: '',
-    album: '',
-    genres: [],
-    coverImage: '',
-    ...initialValues,
+    title: initialValues?.title ?? '',
+    artist: initialValues?.artist ?? '',
+    album: initialValues?.album ?? '',
+    genres: initialValues?.genres ?? [],
+    coverImage: initialValues?.coverImage ?? '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  const validate = (): boolean => {
+  const validate = async (): Promise<boolean> => {
     const errs: Record<string, string> = {};
     if (!formData.title.trim()) errs.title = 'Title is required';
     if (!formData.artist.trim()) errs.artist = 'Artist is required';
 
-    if (formData.coverImage && !/^https?:\/\/.+\.(jpg|jpeg|png|webp)$/i.test(formData.coverImage)) {
-      errs.coverImage = 'Invalid image URL';
+    if (formData.coverImage) {
+      const isFormatValid = /^https?:\/\/[^\\s]+?\.(jpg|jpeg|png|webp)$/i.test(formData.coverImage);
+      const isLoadable = await validateImageUrl(formData.coverImage);
+
+      if (!isFormatValid || !isLoadable) {
+        errs.coverImage = 'Cover image must be a valid and accessible image URL';
+      }
     }
 
     setErrors(errs);
@@ -86,7 +99,8 @@ const TrackMetadataForm: React.FC<Props> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    const isValid = await validate();
+    if (!isValid) return;
 
     try {
       if (trackId) {
