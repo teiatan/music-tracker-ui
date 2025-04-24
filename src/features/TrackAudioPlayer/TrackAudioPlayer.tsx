@@ -63,7 +63,7 @@ const TrackAudioPlayer = ({ track, onNext, onPrev, handlePlaying, audioRef }: Pr
         const value = dataArray[i];
         const barHeight = Math.min(value / 2, 30);
         const gradient = canvasCtx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#1976d2');
+        gradient.addColorStop(0, '#3b82f6');
 
         canvasCtx.fillStyle = gradient;
         canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);

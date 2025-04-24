@@ -36,6 +36,26 @@ const Pagination: React.FC<Props> = ({
     };
   }, [localItemsPerPage, debouncedItemsPerPageChange]);
 
+  useEffect(() => {
+    const pagination = document.querySelector(`.${styles.pagination}`);
+    if (!pagination) return;
+
+    pagination.setAttribute('data-testid', 'pagination');
+
+    const listItems = pagination.querySelectorAll('li');
+
+    listItems.forEach((li) => {
+      const content = li.textContent?.trim();
+      if (content === '»') {
+        const link = li.querySelector('a, span');
+        if (link) link.setAttribute('data-testid', 'pagination-next');
+      } else if (content === '«') {
+        const link = li.querySelector('a, span');
+        if (link) link.setAttribute('data-testid', 'pagination-prev');
+      }
+    });
+  }, [currentPage, totalPages]);
+
   return (
     <div className={styles.paginationContainer}>
       <ResponsivePagination
