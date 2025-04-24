@@ -4,6 +4,7 @@ import styles from './UploadTrackModalContent.module.scss';
 import { Track } from '../../api/types';
 import { uploadTrackFile } from '../../api/uploadTrackFile.api';
 import { deleteTrackFile } from '../../api/deleteTrackFile.api';
+import { useToast } from '../../context/ToastContext.tsx';
 
 interface Props {
   track: Track | null;
@@ -15,6 +16,7 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { addToast } = useToast();
 
   const handleUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
@@ -41,10 +43,12 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
       setError(null);
 
       await uploadTrackFile(track!.id, file);
+      addToast('File uploaded successfully!', 'success');
       onUploaded();
     } catch (err) {
       console.error(err);
       setError('Upload failed. Try again.');
+      addToast('Upload failed. Try again.', 'error');
     } finally {
       setIsProcessing(false);
     }
@@ -56,10 +60,12 @@ const UploadTrackModalContent: React.FC<Props> = ({ track, onClose, onUploaded }
       setError(null);
 
       await deleteTrackFile(track!.id);
+      addToast('File deleted successfully!', 'success');
       onUploaded();
     } catch (err) {
       console.error(err);
       setError('Failed to delete file. Try again.');
+      addToast('Failed to delete file.', 'error');
     } finally {
       setIsProcessing(false);
     }
