@@ -57,6 +57,24 @@ npm run start
 
 ---
 
+## Available Scripts
+
+The following npm scripts are available in the `music-tracker-ui` project:
+
+| Script       | Command             | Description                                                           |
+|--------------|---------------------|-----------------------------------------------------------------------|
+| Start        | `npm run start`     | Launches the Vite development server for local development           |
+| Build        | `npm run build`     | Compiles TypeScript and builds the production-ready bundle           |
+| Preview      | `npm run preview`   | Serves the production build locally for preview                      |
+| Lint         | `npm run lint`      | Runs ESLint to analyze code quality                                  |
+| Lint:fix     | `npm run lint:fix`  | Runs ESLint and automatically fixes style issues                     |
+| Format       | `npm run format`    | Formats all files in the project using Prettier                      |
+| Test         | `npm run test`      | Runs all unit and integration tests using Jest                       |
+
+> 📦 You can also run these scripts using `pnpm` or `yarn`, depending on your package manager of choice.
+
+---
+
 ## Links
 
 - **Repository**: [https://github.com/teiatan/music-tracker-ui](https://github.com/teiatan/music-tracker-ui)
